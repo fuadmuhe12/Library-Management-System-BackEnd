@@ -1,0 +1,13 @@
+2024-07-09 11:53:02.972 +03:00 [INF] new User created user@example.com
+2024-07-09 14:00:02.068 +03:00 [ERR] Failed to Create account - Email => user@example.com Errors=>  System.Collections.Generic.List`1[Microsoft.AspNetCore.Identity.IdentityError]
+2024-07-09 14:00:42.372 +03:00 [ERR] Failed to Create account - Email => user@example.com Errors=>  System.Collections.Generic.List`1[Microsoft.AspNetCore.Identity.IdentityError]
+2024-07-09 14:08:50.679 +03:00 [ERR] Failed to Create account - Email => user@example.com Errors=>  System.Collections.Generic.List`1[Microsoft.AspNetCore.Identity.IdentityError]
+2024-07-09 14:11:44.588 +03:00 [ERR] Failed to Create account - Email => user@edssdxample.com Errors=>  System.Collections.Generic.List`1[Microsoft.AspNetCore.Identity.IdentityError]
+2024-07-09 14:12:02.635 +03:00 [INF] new User created user@edssdxample.com
+2024-07-09 14:12:03.035 +03:00 [INF] Token Generated for user@edssdxample.com
+2024-07-09 14:25:01.854 +03:00 [ERR] Failed to Create account - Email => user@example.com Errors=>  @System.Collections.Generic.List`1[Microsoft.AspNetCore.Identity.IdentityError]
+2024-07-09 14:26:00.287 +03:00 [INF] new User created user@exakjdfmple.com
+2024-07-09 14:26:00.492 +03:00 [INF] Token Generated for user@exakjdfmple.com
+2024-07-09 14:26:31.961 +03:00 [INF] Token Generated for user@exakjdfmple.com
+2024-07-09 14:26:54.943 +03:00 [WRN] User Login Failed  INCorrect Password - UserName => strijskdng
+2024-07-09 14:27:31.601 +03:00 [WRN] User Not Found - UserName => strijskdn

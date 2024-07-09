@@ -139,6 +139,58 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            CategoryName = "Mystery"
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            CategoryName = "Fantasy"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            CategoryName = "Science Fiction"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            CategoryName = "Biography"
+                        },
+                        new
+                        {
+                            CategoryId = 5,
+                            CategoryName = "Self-Help"
+                        },
+                        new
+                        {
+                            CategoryId = 6,
+                            CategoryName = "Travel"
+                        },
+                        new
+                        {
+                            CategoryId = 7,
+                            CategoryName = "Picture Books"
+                        },
+                        new
+                        {
+                            CategoryId = 8,
+                            CategoryName = "Textbooks"
+                        },
+                        new
+                        {
+                            CategoryId = 9,
+                            CategoryName = "Comics"
+                        },
+                        new
+                        {
+                            CategoryId = 10,
+                            CategoryName = "Cooking"
+                        });
                 });
 
             modelBuilder.Entity("Library_Management_System_BackEnd.Models.Fine", b =>
@@ -258,6 +310,20 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "11d5129c-3e69-4ca0-8c80-bf870dbb18a0",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "7e6a2cd5-afda-41db-81ff-e333a0cab2c8",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -443,6 +509,18 @@ namespace Library_Management_System_BackEnd.Data.Migrations
             modelBuilder.Entity("Library_Management_System_BackEnd.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Roles")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("User");
                 });

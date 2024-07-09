@@ -156,3 +156,7 @@ C:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\obj\D
 C:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\obj\Debug\net8.0\Library Management System BackEnd.pdb
 C:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\obj\Debug\net8.0\Library Management System BackEnd.genruntimeconfig.cache
 C:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\obj\Debug\net8.0\ref\Library Management System BackEnd.dll
+C:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+C:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
