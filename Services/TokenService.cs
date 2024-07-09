@@ -5,8 +5,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Library_Management_System_BackEnd.Entities.Models;
 using Library_Management_System_BackEnd.Interfaces;
-using Library_Management_System_BackEnd.Models;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 

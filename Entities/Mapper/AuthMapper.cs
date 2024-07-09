@@ -2,17 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Library_Management_System_BackEnd.Dtos.AuthDto;
-using Library_Management_System_BackEnd.Models;
+using Library_Management_System_BackEnd.Entities.Dtos.AuthDto;
+using Library_Management_System_BackEnd.Entities.Models;
 
-namespace Library_Management_System_BackEnd.Mapper
+namespace Library_Management_System_BackEnd.Entities.Mapper
 {
     public static class AuthMapper
     {
-        
-        public static User ToUserFromRegisterDto(this RegisterDto dto){
 
-            return new User{
+        public static User ToUserFromRegisterDto(this RegisterDto dto)
+        {
+
+            return new User
+            {
                 UserName = dto.UserName,
                 Email = dto.Email,
                 FirstName = dto.FirstName,

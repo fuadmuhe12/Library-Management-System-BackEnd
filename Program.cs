@@ -1,8 +1,9 @@
 using System.Text;
 using Hangfire;
 using Library_Management_System_BackEnd.Data;
+using Library_Management_System_BackEnd.Entities.Models;
 using Library_Management_System_BackEnd.Interfaces;
-using Library_Management_System_BackEnd.Models;
+using Library_Management_System_BackEnd.Repository;
 using Library_Management_System_BackEnd.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors;
@@ -24,20 +25,19 @@ builder
             result.ContentTypes.Add("application/json");
             return result;
         };
+    })
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft
+            .Json
+            .ReferenceLoopHandling
+            .Ignore;
     });
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder
-    .Services.AddControllers()
-    .AddNewtonsoftJson(option =>
-        option.SerializerSettings.ReferenceLoopHandling = Newtonsoft
-            .Json
-            .ReferenceLoopHandling
-            .Ignore
-    );
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
@@ -51,12 +51,13 @@ builder.Services.AddDbContext<LibraryContext>(options =>
         sqlOptions => sqlOptions.EnableRetryOnFailure()
     );
 });
-builder.Services.AddHangfire(config =>
+
+/* builder.Services.AddHangfire(config =>
     config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
 
-builder.Services.AddHangfireServer();
+builder.Services.AddHangfireServer(); */
 
 // Add Identity services to the container
 builder
@@ -98,6 +99,7 @@ builder
     });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
 var app = builder.Build();
 

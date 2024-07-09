@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Library_Management_System_BackEnd.Models
+namespace Library_Management_System_BackEnd.Entities.Models
 {
     public class Book
     {

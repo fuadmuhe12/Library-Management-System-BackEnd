@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Library_Management_System_BackEnd.Models
+namespace Library_Management_System_BackEnd.Entities.Models
 {
     public class Reservation
     {
         public int ReservationId { get; set; }
-        required public string UserId { get; set; } 
+        required public string UserId { get; set; }
         public User? User { get; set; }
         public int BookId { get; set; }
         public Book? Book { get; set; }

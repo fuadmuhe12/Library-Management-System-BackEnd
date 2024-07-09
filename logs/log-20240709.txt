@@ -1,13 +1,17 @@
-2024-07-09 11:53:02.972 +03:00 [INF] new User created user@example.com
-2024-07-09 14:00:02.068 +03:00 [ERR] Failed to Create account - Email => user@example.com Errors=>  System.Collections.Generic.List`1[Microsoft.AspNetCore.Identity.IdentityError]
-2024-07-09 14:00:42.372 +03:00 [ERR] Failed to Create account - Email => user@example.com Errors=>  System.Collections.Generic.List`1[Microsoft.AspNetCore.Identity.IdentityError]
-2024-07-09 14:08:50.679 +03:00 [ERR] Failed to Create account - Email => user@example.com Errors=>  System.Collections.Generic.List`1[Microsoft.AspNetCore.Identity.IdentityError]
-2024-07-09 14:11:44.588 +03:00 [ERR] Failed to Create account - Email => user@edssdxample.com Errors=>  System.Collections.Generic.List`1[Microsoft.AspNetCore.Identity.IdentityError]
-2024-07-09 14:12:02.635 +03:00 [INF] new User created user@edssdxample.com
-2024-07-09 14:12:03.035 +03:00 [INF] Token Generated for user@edssdxample.com
-2024-07-09 14:25:01.854 +03:00 [ERR] Failed to Create account - Email => user@example.com Errors=>  @System.Collections.Generic.List`1[Microsoft.AspNetCore.Identity.IdentityError]
-2024-07-09 14:26:00.287 +03:00 [INF] new User created user@exakjdfmple.com
-2024-07-09 14:26:00.492 +03:00 [INF] Token Generated for user@exakjdfmple.com
-2024-07-09 14:26:31.961 +03:00 [INF] Token Generated for user@exakjdfmple.com
-2024-07-09 14:26:54.943 +03:00 [WRN] User Login Failed  INCorrect Password - UserName => strijskdng
-2024-07-09 14:27:31.601 +03:00 [WRN] User Not Found - UserName => strijskdn
+2024-07-09 17:02:43.478 +03:00 [INF] New author registered with  @Library_Management_System_BackEnd.Entities.Models.Author
+2024-07-09 17:03:34.453 +03:00 [INF] New author registered with  {"AuthorId":2,"AuthorName":"string","Biography":"string","$type":"Author"}
+2024-07-09 17:07:37.588 +03:00 [INF] New author registered with  {"AuthorId":3,"AuthorName":"string","Biography":"string","$type":"Author"}
+2024-07-09 17:08:28.772 +03:00 [WRN] User Not Found - UserName => strijskdn
+2024-07-09 17:08:39.447 +03:00 [INF] New author registered with  {"AuthorId":4,"AuthorName":"string","Biography":"string","$type":"Author"}
+2024-07-09 17:09:03.189 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-09 17:09:21.746 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-09 17:09:25.989 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-09 17:09:35.476 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-09 17:09:43.376 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-09 17:24:47.581 +03:00 [WRN] Author with id 55 not found
+2024-07-09 17:25:17.222 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-09 17:25:25.599 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-09 17:32:22.362 +03:00 [WRN] Delete Failed:  Author with id 2  not found
+2024-07-09 17:32:36.249 +03:00 [WRN] Delete Failed:  Author with id 3  not found
+2024-07-09 17:32:46.651 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-09 17:32:53.642 +03:00 [INF] GetAllAuthors method in AuthorController class was called

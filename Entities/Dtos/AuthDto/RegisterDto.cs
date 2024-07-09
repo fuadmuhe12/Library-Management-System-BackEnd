@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks;
 
-namespace Library_Management_System_BackEnd.Dtos.AuthDto
+namespace Library_Management_System_BackEnd.Entities.Dtos.AuthDto
 {
     public class RegisterDto
     {

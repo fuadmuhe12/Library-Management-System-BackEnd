@@ -1,4 +1,4 @@
-namespace Library_Management_System_BackEnd.Models
+namespace Library_Management_System_BackEnd.Entities.Models
 {
     public enum BookStatus
     {
