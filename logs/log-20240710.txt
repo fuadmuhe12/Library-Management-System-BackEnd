@@ -1,0 +1,2 @@
+2024-07-10 11:23:22.327 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-10 12:38:17.618 +03:00 [INF] New author registered with  {"AuthorId":1,"AuthorName":"Fuad","Biography":"Legendary Passionate Developer","$type":"Author"}

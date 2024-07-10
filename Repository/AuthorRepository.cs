@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Library_Management_System_BackEnd.Data;
 using Library_Management_System_BackEnd.Entities.Models;
+using Library_Management_System_BackEnd.Helper.Query;
 using Library_Management_System_BackEnd.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ namespace Library_Management_System_BackEnd.Repository
 
         public async Task<Author> AddAuthor(Author author)
         {
+
             await _context.Authors.AddAsync(author);
             await _context.SaveChangesAsync();
             return author;
@@ -22,6 +24,8 @@ namespace Library_Management_System_BackEnd.Repository
 
         public async Task<List<Author>> GetAllAuthors(AuthorQuery query)
         {
+            await _context.Books.ExecuteDeleteAsync();
+            await _context.Categories.ExecuteDeleteAsync();
             var result = _context.Authors.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.AuthorNameSearch))

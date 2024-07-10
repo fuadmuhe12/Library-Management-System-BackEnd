@@ -1,4 +1,4 @@
-﻿namespace Library_Management_System_BackEnd;
+﻿namespace Library_Management_System_BackEnd.Helper.Query;
 
 public class AuthorQuery
 {

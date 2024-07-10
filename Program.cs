@@ -101,6 +101,7 @@ builder
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

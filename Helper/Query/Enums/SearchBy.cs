@@ -1,4 +1,7 @@
-using System;
+namespace Library_Management_System_BackEnd.Helper.Query.Enums
+{
+    /* 
+    using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,5 +28,13 @@ namespace Library_Management_System_BackEnd.Entities.Models
 
         [NotMapped]
         public IFormFile? ImageFile { get; set; }
+    }
+}
+ */
+    public enum SearchBy
+    {
+        Title,
+        Author,
+        ISBN,        
     }
 }

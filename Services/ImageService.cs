@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Library_Management_System_BackEnd.Data.Migrations;
-using Library_Management_System_BackEnd.Helper;
+using Library_Management_System_BackEnd.Helper.Response;
 using Library_Management_System_BackEnd.Interfaces;
 
 namespace Library_Management_System_BackEnd.Services
@@ -27,7 +27,9 @@ namespace Library_Management_System_BackEnd.Services
                 {
                     Directory.CreateDirectory(Uploads);
                 }
-                var ImageExtension = imageFile.FileName.Substring(imageFile.FileName.LastIndexOf('.'));
+                var ImageExtension = imageFile.FileName.Substring(
+                    imageFile.FileName.LastIndexOf('.')
+                );
                 if (!IsValidImage(ImageExtension))
                 {
                     return new SavaImageRespoce
@@ -45,13 +47,18 @@ namespace Library_Management_System_BackEnd.Services
 
                 await stream.DisposeAsync();
 
-                return new SavaImageRespoce { ImageName = FileName, IsSuccess = true };
+                return new SavaImageRespoce
+                {
+                    ImageName = $"Resource//{FileName}",
+                    IsSuccess = true
+                };
             }
             catch (System.Exception e)
             {
                 return new SavaImageRespoce { IsSuccess = false, Error = e };
             }
         }
+
         private string GenerateUniqueName(string imageExtension)
         {
             return $"{Guid.NewGuid()}{imageExtension}";

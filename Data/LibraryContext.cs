@@ -18,6 +18,8 @@ namespace Library_Management_System_BackEnd.Data
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Fine> Fines { get; set; }
         public DbSet<BorrowingRecord> BorrowingRecords { get; set; }
+        public DbSet<Tag> Tags { get; set; }
+        public DbSet<BookTag> BookTag { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -42,19 +44,51 @@ namespace Library_Management_System_BackEnd.Data
 
             var categories = new Category[]
             {
-                new() { CategoryId = 1, CategoryName = "Mystery" },
-                new() { CategoryId = 2, CategoryName = "Fantasy" },
-                new() { CategoryId = 3, CategoryName = "Science Fiction" },
-                new() { CategoryId = 4, CategoryName = "Biography" },
-                new() { CategoryId = 5, CategoryName = "Self-Help" },
-                new() { CategoryId = 6, CategoryName = "Travel" },
-                new() { CategoryId = 7, CategoryName = "Picture Books" },
-                new() { CategoryId = 8, CategoryName = "Textbooks" },
-                new() { CategoryId = 9, CategoryName = "Comics" },
-                new() { CategoryId = 10, CategoryName = "Cooking" }
+                new() { CategoryName = "Fiction", CategoryId = 1 },
+                new() { CategoryName = "Non-Fiction", CategoryId = 2 },
+                new() { CategoryName = "Children", CategoryId = 3 },
+                new() { CategoryName = "Young Adult", CategoryId = 4 },
+                new() { CategoryName = "Academic", CategoryId = 5 }
             };
 
             builder.Entity<Category>().HasData(categories);
+            // seed for tags
+
+            var tags = new Tag[]
+            {
+                new() { TagId = 1, TagName = "Adventure" },
+                new() { TagId = 2, TagName = "Mystery" },
+                new() { TagId = 3, TagName = "Romance" },
+                new() { TagId = 4, TagName = "Science Fiction" },
+                new() { TagId = 5, TagName = "Fantasy" },
+                new() { TagId = 6, TagName = "Thriller" },
+                new() { TagId = 7, TagName = "Historical" },
+                new() { TagId = 8, TagName = "Coming of Age" },
+                new() { TagId = 9, TagName = "Bestsellers" },
+                new() { TagId = 10, TagName = "New Arrivals" },
+                new() { TagId = 11, TagName = "Award Winners" },
+                new() { TagId = 12, TagName = "E-book" },
+                new() { TagId = 13, TagName = "Audiobook" },
+                new() { TagId = 14, TagName = "Hardcover" },
+                new() { TagId = 15, TagName = "Paperback" },
+                new() { TagId = 16, TagName = "English" },
+                new() { TagId = 17, TagName = "Mental Health" },
+                new() { TagId = 18, TagName = "Environmental" }
+            };
+            builder.Entity<Tag>().HasData(tags);
+
+            builder.Entity<BookTag>().HasKey(bookTag => new { bookTag.BookId, bookTag.TagId });
+
+            builder
+                .Entity<BookTag>()
+                .HasOne(bookTag => bookTag.Tag)
+                .WithMany(tag => tag.BookTags)
+                .HasForeignKey(bookTag => bookTag.TagId);
+            builder
+                .Entity<BookTag>()
+                .HasOne(bookTag => bookTag.Book)
+                .WithMany(book => book.BookTags)
+                .HasForeignKey(bookTag => bookTag.BookId);
         }
     }
 }
