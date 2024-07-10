@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\fuaad\\Desktop\\projects new\\.NET\\Library Management System BackEnd\\Library Management System BackEnd.csproj": {}
+    "c:\\Users\\fuaad\\Desktop\\projects new\\.NET\\Library Management System BackEnd\\Library Management System BackEnd.csproj": {}
   },
   "projects": {
-    "C:\\Users\\fuaad\\Desktop\\projects new\\.NET\\Library Management System BackEnd\\Library Management System BackEnd.csproj": {
+    "c:\\Users\\fuaad\\Desktop\\projects new\\.NET\\Library Management System BackEnd\\Library Management System BackEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\fuaad\\Desktop\\projects new\\.NET\\Library Management System BackEnd\\Library Management System BackEnd.csproj",
+        "projectUniqueName": "c:\\Users\\fuaad\\Desktop\\projects new\\.NET\\Library Management System BackEnd\\Library Management System BackEnd.csproj",
         "projectName": "Library Management System BackEnd",
-        "projectPath": "C:\\Users\\fuaad\\Desktop\\projects new\\.NET\\Library Management System BackEnd\\Library Management System BackEnd.csproj",
+        "projectPath": "c:\\Users\\fuaad\\Desktop\\projects new\\.NET\\Library Management System BackEnd\\Library Management System BackEnd.csproj",
         "packagesPath": "C:\\Users\\fuaad\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\fuaad\\Desktop\\projects new\\.NET\\Library Management System BackEnd\\obj\\",
+        "outputPath": "c:\\Users\\fuaad\\Desktop\\projects new\\.NET\\Library Management System BackEnd\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\fuaad\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,5 +20,8 @@ namespace Library_Management_System_BackEnd.Entities.Models
         public DateOnly PublicationYear { get; set; }
         public string Description { get; set; } = string.Empty;
         public string CoverImage { get; set; } = string.Empty;
+
+        [NotMapped]
+        public IFormFile? ImageFile { get; set; }
     }
 }
