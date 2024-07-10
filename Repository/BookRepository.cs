@@ -48,6 +48,18 @@ namespace Library_Management_System_BackEnd.Repository
             return createdBook!;
         }
 
+        public async Task<bool> CategoryExit(int categoryId)
+        {
+            return await _context.Categories.AnyAsync(category =>
+                category.CategoryId == categoryId
+            );
+        }
+
+        public async Task<bool> AuthorExit(int authorId)
+        {
+            return await _context.Authors.AnyAsync(author => author.AuthorId == authorId);
+        }
+
         public async Task<List<Book>> GetAllBooksAsync(BookQuery query)
         {
             var result = _context
@@ -115,8 +127,8 @@ namespace Library_Management_System_BackEnd.Repository
             }
             int skip = (query.PageNumber - 1) * query.PageSize;
             int take = query.PageSize;
-            result =   result.Skip(skip).Take(take);
-            var final =  await result.ToListAsync();
+            result = result.Skip(skip).Take(take);
+            var final = await result.ToListAsync();
 
             return final;
         }
@@ -129,6 +141,24 @@ namespace Library_Management_System_BackEnd.Repository
                 .Include(book => book.BookTags)!
                 .ThenInclude(BookTag => BookTag.Tag)
                 .FirstOrDefaultAsync(book => book.BookId == bookId);
+        }
+
+        public async Task<Book> UpdateBookAsync(Book book)
+        {
+            _context.Books.Update(book);
+            await _context.SaveChangesAsync();
+            var updatedBook = await _context
+                .Books.Include(book => book.Author)
+                .Include(book => book.Category)
+                .Include(book => book.BookTags)!
+                .ThenInclude(BookTag => BookTag.Tag)
+                .FirstOrDefaultAsync(bk => bk.BookId == book.BookId);
+            return updatedBook!;
+        }
+
+        public async Task<int> DeleteBookAsync(int bookId)
+        {
+            return await _context.Books.Where(book => book.BookId == bookId).ExecuteDeleteAsync();
         }
     }
 }

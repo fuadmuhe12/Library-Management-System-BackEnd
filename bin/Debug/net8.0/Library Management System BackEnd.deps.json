@@ -20,6 +20,7 @@
           "Microsoft.EntityFrameworkCore.SqlServer": "8.0.6",
           "Microsoft.EntityFrameworkCore.Tools": "8.0.6",
           "Microsoft.Extensions.Identity.Core": "8.0.6",
+          "Newtonsoft.Json": "13.0.3",
           "Serilog.AspNetCore": "8.0.1",
           "Swashbuckle.AspNetCore": "6.4.0",
           "System.IdentityModel.Tokens.Jwt": "7.6.2"

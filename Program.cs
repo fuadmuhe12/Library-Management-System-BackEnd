@@ -1,12 +1,11 @@
 using System.Text;
-using Hangfire;
 using Library_Management_System_BackEnd.Data;
 using Library_Management_System_BackEnd.Entities.Models;
+using Library_Management_System_BackEnd.Helper.Json;
 using Library_Management_System_BackEnd.Interfaces;
 using Library_Management_System_BackEnd.Repository;
 using Library_Management_System_BackEnd.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +31,13 @@ builder
             .Json
             .ReferenceLoopHandling
             .Ignore;
+    });
+
+builder
+    .Services.AddControllers()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.Converters.Add(new DateOnlyJsonConverter());
     });
 
 // Add services to the container.
@@ -102,6 +108,7 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IConstantRepository, ConstantRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

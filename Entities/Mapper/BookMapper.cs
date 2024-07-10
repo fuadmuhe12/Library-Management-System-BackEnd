@@ -40,6 +40,25 @@ namespace Library_Management_System_BackEnd.Entities.Mapper
             };
         }
 
+        public static Book MapToBookFromUpdate(
+            this UpdateBookDto bookDto,
+            string coverImagePath ,
+            int bookId
+        )
+        {
+            return new Book
+            {
+                BookId = bookId,
+                Title = bookDto.UpdatedTitle,
+                AuthorId = bookDto.UpdatedAuthorId,
+                ISBN = bookDto.UpdatedISBN,
+                CategoryId = bookDto.UpdatedCategoryId,
+                PublicationYear = bookDto.UpdatedPublicationYear,
+                Description = bookDto.UpdatedDescription,
+                CoverImage = bookDto.PrevioesCoverImagePath ?? coverImagePath,
+            };
+        }
+
         public static ViewBookDto ToViewFromBook(this Book book)
         {
             return new ViewBookDto

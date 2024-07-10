@@ -15,7 +15,9 @@ namespace Library_Management_System_BackEnd.Interfaces
         Task<Book> CreateBookAsync(Book book);
         Task<Book?> GetBookByIdAsync(int bookId);
         Task<List<Book>> GetAllBooksAsync(BookQuery query);
-        /*  Task<Book> UpdateBookAsync(Book book);
-          Task DeleteBookAsync(int bookId); */
+        Task<Book> UpdateBookAsync(Book book);
+        Task<bool> AuthorExit(int authorId);
+        Task<bool> CategoryExit(int categoryId);
+        Task<int> DeleteBookAsync(int bookId);
     }
 }

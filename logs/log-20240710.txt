@@ -1,2 +1,8 @@
 2024-07-10 11:23:22.327 +03:00 [INF] GetAllAuthors method in AuthorController class was called
 2024-07-10 12:38:17.618 +03:00 [INF] New author registered with  {"AuthorId":1,"AuthorName":"Fuad","Biography":"Legendary Passionate Developer","$type":"Author"}
+2024-07-10 16:58:42.543 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-10 16:58:42.543 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-10 16:58:42.543 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-10 17:41:10.430 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-10 17:43:35.278 +03:00 [INF] GetAllAuthors method in AuthorController class was called
+2024-07-10 19:25:25.341 +03:00 [INF] New author registered with  {"AuthorId":1,"AuthorName":"string","Biography":"string","$type":"Author"}

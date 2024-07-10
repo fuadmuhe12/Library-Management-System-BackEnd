@@ -41,9 +41,16 @@ namespace Library_Management_System_BackEnd.Controllers
             {
                 return BadRequest(saveImageResponce.Error!.Message);
             }
+            if (
+                !await _bookRepo.CategoryExit(BookDto.CategoryId)
+                || !await _bookRepo.AuthorExit(BookDto.AuthorId)
+            )
+            {
+                return BadRequest("Author or Category does not exist");
+            }
+
             var book = BookDto.ToBookFromCreateDto(saveImageResponce.ImageName!);
             var createdBook = await _bookRepo.CreateBookAsync(book);
-
             return CreatedAtRoute(
                 _GetBookpath,
                 new { BookId = createdBook.BookId },
@@ -88,6 +95,52 @@ namespace Library_Management_System_BackEnd.Controllers
 
         [HttpPut]
         [Route("{bookId:int}")]
-        public Task<IActionResult> UpdateBook([FromRoute] int bookId, UpdateBookDto bookDto) { }
+        public async Task<IActionResult> UpdateBook(
+            [FromRoute] int bookId,
+            [FromForm] UpdateBookDto bookDto
+        )
+        {
+            if (
+                !await _bookRepo.CategoryExit(bookDto.UpdatedCategoryId)
+                || !await _bookRepo.AuthorExit(bookDto.UpdatedAuthorId)
+            )
+            {
+                return BadRequest("Author or Category does not exist");
+            }
+            if (bookDto.UpdatedCoverImage != null)
+            {
+                var saveImageResponce = await _imageService.SaveImageAsync(
+                    bookDto.UpdatedCoverImage
+                );
+                if (!saveImageResponce.IsSuccess)
+                {
+                    return BadRequest(saveImageResponce.Error!.Message);
+                }
+                bookDto.PrevioesCoverImagePath = saveImageResponce.ImageName;
+
+                var book = bookDto.MapToBookFromUpdate(saveImageResponce.ImageName!, bookId);
+                var updatedBook = await _bookRepo.UpdateBookAsync(book);
+
+                return Ok(updatedBook.ToViewFromBook());
+            }
+            else
+            {
+                var bookWithoutImage = bookDto.MapToBookFromUpdate("", bookId);
+                var updatedBook = await _bookRepo.UpdateBookAsync(bookWithoutImage);
+                return Ok(updatedBook.ToViewFromBook());
+            }
+        }
+
+        [HttpDelete]
+        [Route("{bookId:int}")]
+        public async Task<IActionResult> DeleteBookAsync([FromRoute] int bookId)
+        {
+            var deletedBook = await _bookRepo.DeleteBookAsync(bookId);
+            if (deletedBook == 0)
+            {
+                return NotFound();
+            }
+            return Ok();
+        }
     }
 }
