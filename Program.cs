@@ -1,5 +1,6 @@
 using System.Text;
 using dotenv.net;
+using Hangfire;
 using Library_Management_System_BackEnd.Data;
 using Library_Management_System_BackEnd.Entities.Mapper;
 using Library_Management_System_BackEnd.Entities.Models;
@@ -101,12 +102,11 @@ builder.Services.AddDbContext<LibraryContext>(options =>
     );
 });
 
-/* builder.Services.AddHangfire(config =>
+builder.Services.AddHangfire(config =>
     config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-
-builder.Services.AddHangfireServer(); */
+builder.Services.AddHangfireServer();
 
 // Add Identity services to the container
 builder
@@ -158,8 +158,6 @@ builder.Services.AddSingleton(emailSettings);
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IFineRepository, FineRepository>();
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -176,5 +174,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseHangfireDashboard();
 
 app.Run();

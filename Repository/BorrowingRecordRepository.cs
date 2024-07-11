@@ -1,3 +1,4 @@
+using Hangfire;
 using Library_Management_System_BackEnd.Data;
 using Library_Management_System_BackEnd.Entities.Mapper;
 using Library_Management_System_BackEnd.Entities.Models;
@@ -6,6 +7,7 @@ using Library_Management_System_BackEnd.Helper.Response;
 using Library_Management_System_BackEnd.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Library_Management_System_BackEnd.Repository
 {
@@ -19,13 +21,13 @@ namespace Library_Management_System_BackEnd.Repository
         IFineRepository fineRepo
     ) : IBorrowingRecordRepository
     {
-        private readonly LibraryContext _context = context;
-        private readonly IBookRepository _bookRepo = bookRepo;
-        private readonly IReservationRepository _reservationRepo = reservationRepo;
-        private readonly UserManager<User> _userManager = userManager;
-        private readonly IEmailService _emailService = emailService;
-        private readonly INotificationRepository _notificationRepo = notificationRepo;
-        private readonly IFineRepository _fineRepo = fineRepo;
+        public  LibraryContext _context = context;
+        public  IBookRepository _bookRepo = bookRepo;
+        public  IReservationRepository _reservationRepo = reservationRepo;
+        public  UserManager<User> _userManager = userManager;
+        public  IEmailService _emailService = emailService;
+        public  INotificationRepository _notificationRepo = notificationRepo;
+        public  IFineRepository _fineRepo = fineRepo;
 
         public async Task<BorrowingRecordResponce> CreateBorrowingRecord(BorrowingRecord record)
         {
@@ -50,7 +52,7 @@ namespace Library_Management_System_BackEnd.Repository
 
         public async Task ReturnBook(string userId, int bookId)
         {
-            var firstResevation = await _reservationRepo.GetCurrentReservation( bookId);
+            var firstResevation = await _reservationRepo.GetCurrentReservation(bookId);
             var record = await _context
                 .BorrowingRecords.Include(rec => rec.Book)
                 .Include(rec => rec.User)
@@ -69,7 +71,6 @@ namespace Library_Management_System_BackEnd.Repository
             {
                 await RemindUser(userId, bookId, firstResevation);
             }
-            
             else
             {
                 await _bookRepo.UpdateBookStatus(bookId, BookStatus.Available);
@@ -78,8 +79,10 @@ namespace Library_Management_System_BackEnd.Repository
             await _context.SaveChangesAsync();
         }
 
-        private async Task RemindUser(string userId, int bookId, Reservation? firstResevation)
+        public async Task RemindUser(string userId, int bookId, Reservation? firstResevation)
         {
+            
+            Log.Information("Reminding user with id {userId} and book id {bookId}", userId, bookId);
             await _bookRepo.UpdateBookStatus(bookId, BookStatus.Reserved);
 
             var notification = await _notificationRepo.CreateNotification(
@@ -89,9 +92,14 @@ namespace Library_Management_System_BackEnd.Repository
             );
             var mailRequest = notification.MapToMailRequest(firstResevation.User!.Email!);
             await _emailService.SendEmailAsync(mailRequest);
+
+            BackgroundJob.Schedule(
+                () => RemoveCurrentReservation(firstResevation.ReservationId, bookId),
+                TimeSpan.FromSeconds(10)
+            );
         }
 
-        private async Task FineUser(string userId, BorrowingRecord? record)
+        public async Task FineUser(string userId, BorrowingRecord? record)
         {
             var diff = (record.ReturnDate - record.DueDate).Value.Days;
             decimal fineAmaont = diff * 0.5m;
@@ -106,6 +114,30 @@ namespace Library_Management_System_BackEnd.Repository
 
             var mailRequest = notification.MapToMailRequest(record.User!.Email!);
             await _emailService.SendEmailAsync(mailRequest);
+        }
+
+        public async Task RemoveCurrentReservation(int reservationId, int bookId)
+        {
+            Log.Information("Removing reservation with id {reservationId}", reservationId);
+            var Oldreservation = await _reservationRepo.GetReservationById(reservationId);
+            if (Oldreservation != null && Oldreservation.Status == ReservationStatus.Pending)
+            {
+                {
+                    await _reservationRepo.UpdateReservationStatus(
+                        reservationId,
+                        ReservationStatus.Failed
+                    );
+                    var curReservation = await _reservationRepo.GetCurrentReservation(bookId);
+                    if (curReservation != null)
+                    {
+                        await RemindUser(curReservation.UserId, bookId, curReservation);
+                    }
+                    else
+                    {
+                        await _bookRepo.UpdateBookStatus(bookId, BookStatus.Available);
+                    }
+                }
+            }
         }
     }
 }

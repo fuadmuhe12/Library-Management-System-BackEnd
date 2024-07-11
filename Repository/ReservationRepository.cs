@@ -26,7 +26,9 @@ namespace Library_Management_System_BackEnd.Repository
             try
             {
                 return await reservations
-                    .Where(reser => reser.Status == ReservationStatus.Pending && reser.BookId == bookId)
+                    .Where(reser =>
+                        reser.Status == ReservationStatus.Pending && reser.BookId == bookId
+                    )
                     .Include(res => res.Book)
                     .Include(res => res.User)
                     .FirstAsync();
@@ -35,6 +37,21 @@ namespace Library_Management_System_BackEnd.Repository
             {
                 return null;
             }
+        }
+
+        public async Task<Reservation?> GetReservationById(int id)
+        {
+            return await _context.Reservations.FirstOrDefaultAsync(reser =>
+                reser.ReservationId == id
+            );
+        }
+
+        public async Task<List<Reservation>> GetReservations(int bookId)
+        {
+            return await _context
+                .Reservations.Include(res => res.Book)
+                .Where(reser => reser.Status == ReservationStatus.Pending && reser.BookId == bookId)
+                .ToListAsync();
         }
 
         public async Task<bool> IsUserReservedBook(string userId, int bookId)
@@ -55,6 +72,7 @@ namespace Library_Management_System_BackEnd.Repository
             {
                 reservation.Status = newStatus;
             }
+            await _context.SaveChangesAsync();
         }
     }
 }

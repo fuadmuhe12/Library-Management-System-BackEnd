@@ -63,5 +63,14 @@ namespace Library_Management_System_BackEnd.Controllers
             await _reservationRepository.CreateReservation(bookId, userId);
             return Ok("Resevation Created Successfully");
         }
+
+        [HttpGet]
+        [Route("{bookId:int}")]
+        public async Task<IActionResult> GetReservations([FromRoute] int bookId)
+        {
+            var userId = User.GetUserId();
+            var reservations = await _reservationRepository.GetReservations(bookId);
+            return Ok(reservations);
+        }
     }
 }

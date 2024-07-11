@@ -12,5 +12,9 @@ namespace Library_Management_System_BackEnd.Interfaces
         Task UpdateReservationStatus(int id, ReservationStatus newStatus);
         Task CreateReservation(int bookId, string userId);
         Task<bool> IsUserReservedBook(string userId, int bookId);
+        Task<Reservation?> GetReservationById(int id);
+
+        Task<List<Reservation>> GetReservations(int bookId);
+
     }
 }
