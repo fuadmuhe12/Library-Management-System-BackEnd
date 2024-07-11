@@ -11,18 +11,10 @@ namespace Library_Management_System_BackEnd.Extensions
     {
         public static string GetUserId(this ClaimsPrincipal claimsPrincipal)
         {
-            try
-            {
-                var claim = claimsPrincipal.Claims.SingleOrDefault(claim =>
-                    claim.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/sub")
-                );
-                return claim!.Value;
-            }
-            catch (System.Exception e)
-            {
-                Log.Error($"Error in GetUserId method in GetClaimData class => {e}");
-                return null;
-            }
+            var claim = claimsPrincipal.Claims.SingleOrDefault(claim =>
+                claim.Type.Equals("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")
+            );
+            return claim!.Value;
         }
     }
 }

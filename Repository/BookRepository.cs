@@ -160,5 +160,17 @@ namespace Library_Management_System_BackEnd.Repository
         {
             return await _context.Books.Where(book => book.BookId == bookId).ExecuteDeleteAsync();
         }
+
+        public async Task<Book?> UpdateBookStatus(int bookId, BookStatus newStatus)
+        {
+            var book = await _context.Books.FirstOrDefaultAsync(book => book.BookId == bookId);
+            if (book != null)
+            {
+                book.BookStatus = newStatus;
+            }
+
+            await _context.SaveChangesAsync();
+            return book;
+        }
     }
 }

@@ -19,5 +19,6 @@ namespace Library_Management_System_BackEnd.Interfaces
         Task<bool> AuthorExit(int authorId);
         Task<bool> CategoryExit(int categoryId);
         Task<int> DeleteBookAsync(int bookId);
+        Task<Book?> UpdateBookStatus(int bookId, BookStatus newStatus);
     }
 }

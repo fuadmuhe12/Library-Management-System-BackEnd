@@ -1,0 +1,4 @@
+2024-07-11 08:56:10.689 +03:00 [INF] new User created fuaadmuhe12@gmail.com
+2024-07-11 08:56:12.794 +03:00 [INF] Token Generated for fuaadmuhe12@gmail.com
+2024-07-11 08:58:52.089 +03:00 [INF] Token Generated for fuaadmuhe12@gmail.com
+2024-07-11 09:59:31.031 +03:00 [INF] Token Generated for fuaadmuhe12@gmail.com
