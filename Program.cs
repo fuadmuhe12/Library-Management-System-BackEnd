@@ -1,7 +1,10 @@
 using System.Text;
+using dotenv.net;
 using Library_Management_System_BackEnd.Data;
+using Library_Management_System_BackEnd.Entities.Mapper;
 using Library_Management_System_BackEnd.Entities.Models;
 using Library_Management_System_BackEnd.Helper.Json;
+using Library_Management_System_BackEnd.Helper.Mail;
 using Library_Management_System_BackEnd.Interfaces;
 using Library_Management_System_BackEnd.Repository;
 using Library_Management_System_BackEnd.Services;
@@ -15,6 +18,12 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Set up email configuration
+DotEnv.Load();
+var emailSettings = FromEnv.MapToEmailSettings();
+builder.Services.AddSingleton(emailSettings);
+
+// Add services to the container.
 builder
     .Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -139,13 +148,13 @@ builder
             )
         };
     });
-
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IConstantRepository, ConstantRepository>();
 builder.Services.AddScoped<IBorrowingRecordRepository, BorrowingRecordRepository>();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
 var app = builder.Build();
 

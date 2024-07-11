@@ -58,6 +58,10 @@
               "target": "Package",
               "version": "[1.8.14, )"
             },
+            "MailKit": {
+              "target": "Package",
+              "version": "[4.7.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.6, )"
@@ -98,6 +102,10 @@
               "target": "Package",
               "version": "[8.0.6, )"
             },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[4.7.1, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"
@@ -113,6 +121,10 @@
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[7.6.2, )"
+            },
+            "dotenv.net": {
+              "target": "Package",
+              "version": "[3.2.0, )"
             }
           },
           "imports": [

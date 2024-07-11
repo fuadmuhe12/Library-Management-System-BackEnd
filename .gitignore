@@ -1,0 +1,103 @@
+# .NET and Visual Studio
+# Ignore build outputs and user-specific files
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# IIS Express settings
+/.vs/
+
+# Visual Studio Code settings
+.vscode/
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Auto-generated files
+Generated/
+
+# Logs
+*.log
+logs/
+
+# Environment variables
+.env
+
+# Npm packages
+node_modules/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+packages/
+# The packages folder can be ignored because of Package Restore
+**/packages/*
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# MacOS
+.DS_Store
+
+# Temporary files
+~$*
+
+# Rider
+.idea/
+*.sln.iml
+
+# Local History for JetBrains IDEs
+/.localhistory/
+
+# JetBrains IDE - Generated content
+.idea/
+
+# Rider
+.idea/
+*.sln.iml
+
+# CodeStream settings
+.codestream.json
+
+# NCrunch
+.ncrunchsolution/
+
+# Coverlet Coverage Tool
+coverage*.json
+coverage*.xml
+coverage*.info
+
+# SQLite database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Entity Framework
+*.jfm
+
+# ASP.NET Core Secret Manager secrets.json file
+secrets.json
+
+# DotNetWatch
+.dotnetwatch.json
+
+# Cake - Uncomment if you are using it
+# tools/**/*
+# Addons/**/*

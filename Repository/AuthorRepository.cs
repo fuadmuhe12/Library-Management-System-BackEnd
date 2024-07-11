@@ -24,16 +24,7 @@ namespace Library_Management_System_BackEnd.Repository
 
         public async Task<List<Author>> GetAllAuthors(AuthorQuery query)
         {
-             var categories = new Category[]
-            {
-                new() { CategoryName = "Fiction"},
-                new() { CategoryName = "Non-Fiction" },
-                new() { CategoryName = "Children" },
-                new() { CategoryName = "Young Adult" },
-                new() { CategoryName = "Academic" }
-            };
-            _context.Categories.AddRange(categories);
-            await _context.SaveChangesAsync();
+          
             var result = _context.Authors.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(query.AuthorNameSearch))

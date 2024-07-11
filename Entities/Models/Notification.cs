@@ -12,5 +12,7 @@ namespace Library_Management_System_BackEnd.Entities.Models
         public DateTime SentDate { get; set; } = DateTime.Now;
         required public string UserId { get; set; }
         public User? User { get; set; }
+        public bool IsRead { get; set; } = false; //TODO: added
+
     }
 }

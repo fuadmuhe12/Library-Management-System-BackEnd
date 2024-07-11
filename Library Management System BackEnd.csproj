@@ -8,9 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="dotenv.net" Version="3.2.0" />
     <PackageReference Include="Hangfire" Version="1.8.14" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14" />
     <PackageReference Include="Hangfire.SqlServer" Version="1.8.14" />
+    <PackageReference Include="MailKit" Version="4.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.6" />
@@ -26,6 +28,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.6" />
+    <PackageReference Include="MimeKit" Version="4.7.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />

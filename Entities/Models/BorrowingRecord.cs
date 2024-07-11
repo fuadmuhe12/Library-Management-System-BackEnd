@@ -16,7 +16,7 @@ namespace Library_Management_System_BackEnd.Entities.Models
         public DateTime IssueDate { get; set; } = DateTime.Now;
         public DateTime DueDate { get; set; } = DateTime.Now.AddDays(14);
         public DateTime? ReturnDate { get; set; }
-        public decimal? FineAmount { get; set; }
+        public decimal? FineAmount { get; set; } // TODO: update Link to Fine Table
 
     }
 }

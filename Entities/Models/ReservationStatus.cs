@@ -7,6 +7,7 @@ namespace Library_Management_System_BackEnd.Entities.Models
         Pending,
         Notified,
         Completed,
-        Cancelled
+        Cancelled,
+        Failed //TODO: :Updated
     }
 }

@@ -160,3 +160,8 @@ C:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\D
 C:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\Debug\net8.0\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 C:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
 C:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+c:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+c:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\Debug\net8.0\MailKit.dll
+c:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\Debug\net8.0\MimeKit.dll
+c:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\Debug\net8.0\System.Formats.Asn1.dll
+c:\Users\fuaad\Desktop\projects new\.NET\Library Management System BackEnd\bin\Debug\net8.0\dotenv.net.dll
