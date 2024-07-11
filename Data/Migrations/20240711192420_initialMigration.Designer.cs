@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Library_Management_System_BackEnd.Data.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20240709074600_initialMigrations")]
-    partial class initialMigrations
+    [Migration("20240711192420_initialMigration")]
+    partial class initialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,7 @@ namespace Library_Management_System_BackEnd.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.Author", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Author", b =>
                 {
                     b.Property<int>("AuthorId")
                         .ValueGeneratedOnAdd()
@@ -38,7 +38,6 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Biography")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AuthorId");
@@ -46,7 +45,7 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.Book", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Book", b =>
                 {
                     b.Property<int>("BookId")
                         .ValueGeneratedOnAdd()
@@ -91,7 +90,22 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.BorrowingRecord", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.BookTag", b =>
+                {
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("BookId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("BookTag");
+                });
+
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.BorrowingRecord", b =>
                 {
                     b.Property<int>("BorrowingRecordId")
                         .ValueGeneratedOnAdd()
@@ -105,8 +119,8 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("FineAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<bool>("IsReturned")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("IssueDate")
                         .HasColumnType("datetime2");
@@ -127,7 +141,7 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.ToTable("BorrowingRecords");
                 });
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.Category", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Category", b =>
                 {
                     b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
@@ -142,9 +156,36 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            CategoryId = 1,
+                            CategoryName = "Fiction"
+                        },
+                        new
+                        {
+                            CategoryId = 2,
+                            CategoryName = "Non-Fiction"
+                        },
+                        new
+                        {
+                            CategoryId = 3,
+                            CategoryName = "Children"
+                        },
+                        new
+                        {
+                            CategoryId = 4,
+                            CategoryName = "Young Adult"
+                        },
+                        new
+                        {
+                            CategoryId = 5,
+                            CategoryName = "Academic"
+                        });
                 });
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.Fine", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Fine", b =>
                 {
                     b.Property<int>("FineId")
                         .ValueGeneratedOnAdd()
@@ -158,6 +199,15 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
+                    b.Property<int>("BorrowingRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("IssueDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("PaidDate")
                         .HasColumnType("datetime2");
 
@@ -169,12 +219,14 @@ namespace Library_Management_System_BackEnd.Data.Migrations
 
                     b.HasIndex("BookId");
 
+                    b.HasIndex("BorrowingRecordId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Fines");
                 });
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.Notification", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Notification", b =>
                 {
                     b.Property<int>("NotificationId")
                         .ValueGeneratedOnAdd()
@@ -182,12 +234,19 @@ namespace Library_Management_System_BackEnd.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
 
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SentDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -200,7 +259,7 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.ToTable("Notifications");
                 });
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.Reservation", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Reservation", b =>
                 {
                     b.Property<int>("ReservationId")
                         .ValueGeneratedOnAdd()
@@ -236,6 +295,115 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.ToTable("Reservations");
                 });
 
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Tag", b =>
+                {
+                    b.Property<int>("TagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TagId"));
+
+                    b.Property<string>("TagName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TagId");
+
+                    b.ToTable("Tags");
+
+                    b.HasData(
+                        new
+                        {
+                            TagId = 1,
+                            TagName = "Adventure"
+                        },
+                        new
+                        {
+                            TagId = 2,
+                            TagName = "Mystery"
+                        },
+                        new
+                        {
+                            TagId = 3,
+                            TagName = "Romance"
+                        },
+                        new
+                        {
+                            TagId = 4,
+                            TagName = "Science Fiction"
+                        },
+                        new
+                        {
+                            TagId = 5,
+                            TagName = "Fantasy"
+                        },
+                        new
+                        {
+                            TagId = 6,
+                            TagName = "Thriller"
+                        },
+                        new
+                        {
+                            TagId = 7,
+                            TagName = "Historical"
+                        },
+                        new
+                        {
+                            TagId = 8,
+                            TagName = "Coming of Age"
+                        },
+                        new
+                        {
+                            TagId = 9,
+                            TagName = "Bestsellers"
+                        },
+                        new
+                        {
+                            TagId = 10,
+                            TagName = "New Arrivals"
+                        },
+                        new
+                        {
+                            TagId = 11,
+                            TagName = "Award Winners"
+                        },
+                        new
+                        {
+                            TagId = 12,
+                            TagName = "E-book"
+                        },
+                        new
+                        {
+                            TagId = 13,
+                            TagName = "Audiobook"
+                        },
+                        new
+                        {
+                            TagId = 14,
+                            TagName = "Hardcover"
+                        },
+                        new
+                        {
+                            TagId = 15,
+                            TagName = "Paperback"
+                        },
+                        new
+                        {
+                            TagId = 16,
+                            TagName = "English"
+                        },
+                        new
+                        {
+                            TagId = 17,
+                            TagName = "Mental Health"
+                        },
+                        new
+                        {
+                            TagId = 18,
+                            TagName = "Environmental"
+                        });
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -261,6 +429,20 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "73fa9b3b-a0b7-4fa5-b838-2cbe2c371a11",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "db1017a8-bc41-4552-bb19-21149cd8fe11",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -443,22 +625,34 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.User", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Roles")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("User");
                 });
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.Book", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Book", b =>
                 {
-                    b.HasOne("Library_Management_System_BackEnd.Models.Author", "Author")
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.Author", "Author")
                         .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library_Management_System_BackEnd.Models.Category", "Category")
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -469,15 +663,34 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.BorrowingRecord", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.BookTag", b =>
                 {
-                    b.HasOne("Library_Management_System_BackEnd.Models.Book", "Book")
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.Book", "Book")
+                        .WithMany("BookTags")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.Tag", "Tag")
+                        .WithMany("BookTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.BorrowingRecord", b =>
+                {
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library_Management_System_BackEnd.Models.User", "User")
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -488,15 +701,21 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.Fine", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Fine", b =>
                 {
-                    b.HasOne("Library_Management_System_BackEnd.Models.Book", "Book")
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library_Management_System_BackEnd.Models.User", "User")
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.BorrowingRecord", "BorrowingRecord")
+                        .WithMany()
+                        .HasForeignKey("BorrowingRecordId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -504,12 +723,14 @@ namespace Library_Management_System_BackEnd.Data.Migrations
 
                     b.Navigation("Book");
 
+                    b.Navigation("BorrowingRecord");
+
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.Notification", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Notification", b =>
                 {
-                    b.HasOne("Library_Management_System_BackEnd.Models.User", "User")
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -518,15 +739,15 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Library_Management_System_BackEnd.Models.Reservation", b =>
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Reservation", b =>
                 {
-                    b.HasOne("Library_Management_System_BackEnd.Models.Book", "Book")
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.Book", "Book")
                         .WithMany()
                         .HasForeignKey("BookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Library_Management_System_BackEnd.Models.User", "User")
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -586,6 +807,16 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Book", b =>
+                {
+                    b.Navigation("BookTags");
+                });
+
+            modelBuilder.Entity("Library_Management_System_BackEnd.Entities.Models.Tag", b =>
+                {
+                    b.Navigation("BookTags");
                 });
 #pragma warning restore 612, 618
         }

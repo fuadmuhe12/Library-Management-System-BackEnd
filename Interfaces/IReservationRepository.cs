@@ -8,7 +8,7 @@ namespace Library_Management_System_BackEnd.Interfaces
 {
     public interface IReservationRepository
     {
-        Task<Reservation?> GetCurrentReservation();
+        Task<Reservation?> GetCurrentReservation(int bookId);
         Task UpdateReservationStatus(int id, ReservationStatus newStatus);
         Task CreateReservation(int bookId, string userId);
         Task<bool> IsUserReservedBook(string userId, int bookId);

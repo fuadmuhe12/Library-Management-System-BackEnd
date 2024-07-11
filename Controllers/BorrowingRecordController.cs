@@ -43,14 +43,14 @@ namespace Library_Management_System_BackEnd.Controllers
                 return NotFound("Book not found");
             }
             var bookStatus = book.BookStatus;
-            if (bookStatus != BookStatus.Available || bookStatus != BookStatus.Reserved)
+            if (bookStatus != BookStatus.Available && bookStatus != BookStatus.Reserved)
             {
                 return BadRequest("Book is not available");
             }
             /// updating reservatio if the current book is reserved and the user is the reserver
             if (book.BookStatus == BookStatus.Reserved)
             {
-                var reservation = await _reservationRepo.GetCurrentReservation();
+                var reservation = await _reservationRepo.GetCurrentReservation(bookId);
                 if (reservation != null && reservation.UserId != userId)
                 {
                     return BadRequest("Book Is Reserved By Other Person");
@@ -73,6 +73,32 @@ namespace Library_Management_System_BackEnd.Controllers
                 return Ok("Successfull");
             }
             return StatusCode(500, RecordResponse.ErrorMessage);
+        }
+
+        [HttpPost]
+        [Route("return/{bookId:int}")]
+        public async Task<IActionResult> ReturnBook([FromRoute] int bookId)
+        {
+            var userId = User.GetUserId();
+            var book = await _bookRepo.GetBookByIdAsync(bookId);
+            if (book == null)
+            {
+                return NotFound("Book not found");
+            }
+
+            if (!await _borrowingRecord.IsUserBorrowedBook(userId, bookId))
+            {
+                return BadRequest("You have not borrowed this book");
+            }
+            try
+            {
+                await _borrowingRecord.ReturnBook(userId, bookId);
+                return Ok("Book Returned Successfully");
+            }
+            catch (System.Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }

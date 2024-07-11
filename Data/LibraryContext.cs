@@ -89,6 +89,14 @@ namespace Library_Management_System_BackEnd.Data
                 .HasOne(bookTag => bookTag.Book)
                 .WithMany(book => book.BookTags)
                 .HasForeignKey(bookTag => bookTag.BookId);
+
+            // Fines and Borrowing Records
+            builder
+                .Entity<Fine>()
+                .HasOne(fine => fine.BorrowingRecord)
+                .WithMany()
+                .HasForeignKey(fine => fine.BorrowingRecordId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascade delete
         }
     }
 }

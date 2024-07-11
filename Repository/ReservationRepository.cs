@@ -20,12 +20,21 @@ namespace Library_Management_System_BackEnd.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Reservation?> GetCurrentReservation()
+        public async Task<Reservation?> GetCurrentReservation(int bookId)
         {
             var reservations = _context.Reservations.OrderBy(reser => reser.ReservationDate);
-            return await reservations
-                .Where(reser => reser.Status == ReservationStatus.Pending)
-                .FirstAsync();
+            try
+            {
+                return await reservations
+                    .Where(reser => reser.Status == ReservationStatus.Pending && reser.BookId == bookId)
+                    .Include(res => res.Book)
+                    .Include(res => res.User)
+                    .FirstAsync();
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
         }
 
         public async Task<bool> IsUserReservedBook(string userId, int bookId)

@@ -3,3 +3,14 @@
 2024-07-11 08:58:52.089 +03:00 [INF] Token Generated for fuaadmuhe12@gmail.com
 2024-07-11 09:59:31.031 +03:00 [INF] Token Generated for fuaadmuhe12@gmail.com
 2024-07-11 18:58:41.659 +03:00 [INF] Token Generated for fuaadmuhe12@gmail.com
+2024-07-11 21:58:03.455 +03:00 [INF] new User created fuad.mohamed@aait.edu.et
+2024-07-11 21:58:03.965 +03:00 [INF] Token Generated for fuad.mohamed@aait.edu.et
+2024-07-11 21:59:04.037 +03:00 [INF] New author registered with  {"AuthorId":1,"AuthorName":"Kim Author","Biography":"The Talented Trader","$type":"Author"}
+2024-07-11 21:59:19.575 +03:00 [INF] New author registered with  {"AuthorId":2,"AuthorName":"Felmata","Biography":"The GUy Trader","$type":"Author"}
+2024-07-11 22:26:57.546 +03:00 [INF] New author registered with  {"AuthorId":1,"AuthorName":"Felmata","Biography":"The GUy Trader","$type":"Author"}
+2024-07-11 22:27:17.849 +03:00 [INF] New author registered with  {"AuthorId":2,"AuthorName":"Autheor 2","Biography":"The ds Trader","$type":"Author"}
+2024-07-11 22:27:26.383 +03:00 [INF] New author registered with  {"AuthorId":3,"AuthorName":"Fuaidas","Biography":"The ds Trader","$type":"Author"}
+2024-07-11 22:27:38.565 +03:00 [INF] new User created fuad.mohamed@aait.edu.et
+2024-07-11 22:27:39.162 +03:00 [INF] Token Generated for fuad.mohamed@aait.edu.et
+2024-07-11 22:46:10.811 +03:00 [INF] new User created fuad.mohammed-ug@aau.edu.et
+2024-07-11 22:46:11.251 +03:00 [INF] Token Generated for fuad.mohammed-ug@aau.edu.et

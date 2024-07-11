@@ -13,5 +13,15 @@ namespace Library_Management_System_BackEnd.Entities.Mapper
         {
             return new BorrowingRecord { UserId = recordDto.UserId, BookId = recordDto.BookId };
         }
+
+        public static Fine MapToFine(this BorrowingRecord record, decimal amount)
+        {
+            return new Fine
+            {
+                UserId = record.UserId,
+                BookId = record.BookId,
+                BorrowingRecordId = record.BorrowingRecordId
+            };
+        }
     }
 }

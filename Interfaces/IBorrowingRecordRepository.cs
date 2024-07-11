@@ -10,5 +10,7 @@ namespace Library_Management_System_BackEnd.Interfaces
     public interface IBorrowingRecordRepository
     {
         Task<BorrowingRecordResponce> CreateBorrowingRecord(BorrowingRecord record);
+        Task<bool> IsUserBorrowedBook(string userId, int bookId);
+        Task ReturnBook(string userId, int bookId);
     }
 }

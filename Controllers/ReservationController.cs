@@ -16,11 +16,14 @@ namespace Library_Management_System_BackEnd.Controllers
     [Authorize]
     public class ReservationController(
         IBookRepository bookRepository,
-        IReservationRepository reservationRepository
+        IReservationRepository reservationRepository,
+        IBorrowingRecordRepository borrowingRecordRepository
     ) : ControllerBase
     {
         private readonly IReservationRepository _reservationRepository = reservationRepository;
         private readonly IBookRepository _bookRepository = bookRepository;
+        private readonly IBorrowingRecordRepository _borrowingRecordRepository =
+            borrowingRecordRepository;
 
         /// <summary>
         /// Creates a reservation for a book with the specified book ID.
@@ -32,22 +35,31 @@ namespace Library_Management_System_BackEnd.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateReservation([FromRoute] int bookId)
         {
+            var userId = User.GetUserId();
             var book = await _bookRepository.GetBookByIdAsync(bookId);
+            
             if (book == null)
             {
                 return NotFound("Book not found");
             }
+
             if (book.BookStatus != BookStatus.CheckedOut && book.BookStatus != BookStatus.Reserved)
             {
                 return BadRequest(
                     $"Book is not available for reservation the current status is {book.BookStatus}"
                 );
             }
-            var userId = User.GetUserId();
+
             if (await _reservationRepository.IsUserReservedBook(userId, bookId))
             {
                 return BadRequest("You have already reserved this book");
             }
+
+            if (await _borrowingRecordRepository.IsUserBorrowedBook(userId, bookId))
+            {
+                return BadRequest("You have already borrowed this book");
+            }
+
             await _reservationRepository.CreateReservation(bookId, userId);
             return Ok("Resevation Created Successfully");
         }

@@ -18,7 +18,8 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 //Set up email configuration
-
+DotEnv.Load();
+var emailSettings = FromEnv.MapToEmailSettings();
 
 // Add services to the container.
 builder
@@ -153,9 +154,11 @@ builder.Services.AddScoped<IConstantRepository, ConstantRepository>();
 builder.Services.AddScoped<IBorrowingRecordRepository, BorrowingRecordRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
-DotEnv.Load();
-var emailSettings = FromEnv.MapToEmailSettings();
 builder.Services.AddSingleton(emailSettings);
+builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IFineRepository, FineRepository>();
+
+
 
 var app = builder.Build();
 

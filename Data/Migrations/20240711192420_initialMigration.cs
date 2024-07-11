@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Library_Management_System_BackEnd.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigrations : Migration
+    public partial class initialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,6 +33,9 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Roles = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -58,7 +63,7 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     AuthorId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AuthorName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Biography = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Biography = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -76,6 +81,19 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TagName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.TagId);
                 });
 
             migrationBuilder.CreateTable(
@@ -190,9 +208,11 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                 {
                     NotificationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsRead = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -238,6 +258,30 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BookTag",
+                columns: table => new
+                {
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    TagId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookTag", x => new { x.BookId, x.TagId });
+                    table.ForeignKey(
+                        name: "FK_BookTag_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "BookId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BookTag_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
+                        principalColumn: "TagId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BorrowingRecords",
                 columns: table => new
                 {
@@ -248,7 +292,7 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     IssueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ReturnDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    FineAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
+                    IsReturned = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -261,34 +305,6 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_BorrowingRecords_Books_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Books",
-                        principalColumn: "BookId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Fines",
-                columns: table => new
-                {
-                    FineId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BookId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PaidDate = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Fines", x => x.FineId);
-                    table.ForeignKey(
-                        name: "FK_Fines_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Fines_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "BookId",
@@ -323,6 +339,89 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         principalTable: "Books",
                         principalColumn: "BookId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Fines",
+                columns: table => new
+                {
+                    FineId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BookId = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    IssueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaidDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BorrowingRecordId = table.Column<int>(type: "int", nullable: false),
+                    IsPaid = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Fines", x => x.FineId);
+                    table.ForeignKey(
+                        name: "FK_Fines_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Fines_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "BookId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Fines_BorrowingRecords_BorrowingRecordId",
+                        column: x => x.BorrowingRecordId,
+                        principalTable: "BorrowingRecords",
+                        principalColumn: "BorrowingRecordId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { "73fa9b3b-a0b7-4fa5-b838-2cbe2c371a11", null, "Admin", "ADMIN" },
+                    { "db1017a8-bc41-4552-bb19-21149cd8fe11", null, "User", "USER" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Categories",
+                columns: new[] { "CategoryId", "CategoryName" },
+                values: new object[,]
+                {
+                    { 1, "Fiction" },
+                    { 2, "Non-Fiction" },
+                    { 3, "Children" },
+                    { 4, "Young Adult" },
+                    { 5, "Academic" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Tags",
+                columns: new[] { "TagId", "TagName" },
+                values: new object[,]
+                {
+                    { 1, "Adventure" },
+                    { 2, "Mystery" },
+                    { 3, "Romance" },
+                    { 4, "Science Fiction" },
+                    { 5, "Fantasy" },
+                    { 6, "Thriller" },
+                    { 7, "Historical" },
+                    { 8, "Coming of Age" },
+                    { 9, "Bestsellers" },
+                    { 10, "New Arrivals" },
+                    { 11, "Award Winners" },
+                    { 12, "E-book" },
+                    { 13, "Audiobook" },
+                    { 14, "Hardcover" },
+                    { 15, "Paperback" },
+                    { 16, "English" },
+                    { 17, "Mental Health" },
+                    { 18, "Environmental" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -375,6 +474,11 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BookTag_TagId",
+                table: "BookTag",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_BorrowingRecords_BookId",
                 table: "BorrowingRecords",
                 column: "BookId");
@@ -388,6 +492,11 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                 name: "IX_Fines_BookId",
                 table: "Fines",
                 column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Fines_BorrowingRecordId",
+                table: "Fines",
+                column: "BorrowingRecordId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Fines_UserId",
@@ -429,7 +538,7 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "BorrowingRecords");
+                name: "BookTag");
 
             migrationBuilder.DropTable(
                 name: "Fines");
@@ -442,6 +551,12 @@ namespace Library_Management_System_BackEnd.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
+
+            migrationBuilder.DropTable(
+                name: "BorrowingRecords");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

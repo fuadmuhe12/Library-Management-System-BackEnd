@@ -116,8 +116,8 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.Property<DateTime>("DueDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal?>("FineAmount")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<bool>("IsReturned")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("IssueDate")
                         .HasColumnType("datetime2");
@@ -196,6 +196,15 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.Property<int>("BookId")
                         .HasColumnType("int");
 
+                    b.Property<int>("BorrowingRecordId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsPaid")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("IssueDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("PaidDate")
                         .HasColumnType("datetime2");
 
@@ -206,6 +215,8 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.HasKey("FineId");
 
                     b.HasIndex("BookId");
+
+                    b.HasIndex("BorrowingRecordId");
 
                     b.HasIndex("UserId");
 
@@ -220,12 +231,19 @@ namespace Library_Management_System_BackEnd.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
 
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Message")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("SentDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -412,13 +430,13 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c360a497-48ed-4806-b881-015ad8a5d86e",
+                            Id = "73fa9b3b-a0b7-4fa5-b838-2cbe2c371a11",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "844051de-13bc-4e71-97e6-61754b2d1550",
+                            Id = "db1017a8-bc41-4552-bb19-21149cd8fe11",
                             Name = "User",
                             NormalizedName = "USER"
                         });
@@ -688,6 +706,12 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Library_Management_System_BackEnd.Entities.Models.BorrowingRecord", "BorrowingRecord")
+                        .WithMany()
+                        .HasForeignKey("BorrowingRecordId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Library_Management_System_BackEnd.Entities.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -695,6 +719,8 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Book");
+
+                    b.Navigation("BorrowingRecord");
 
                     b.Navigation("User");
                 });
