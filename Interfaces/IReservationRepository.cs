@@ -10,5 +10,6 @@ namespace Library_Management_System_BackEnd.Interfaces
     {
         Task<Reservation?> GetCurrentReservation();
         Task UpdateReservationStatus(int id, ReservationStatus newStatus);
+        Task CreateReservation(int bookId, string userId);
     }
 }

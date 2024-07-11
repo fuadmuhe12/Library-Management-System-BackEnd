@@ -33,6 +33,7 @@ namespace Library_Management_System_BackEnd.Controllers
         /// <returns>An <see cref="IActionResult"/> representing the result of the operation.</returns>
         /// [HttpPost]
         [Route("{bookId:int}")]
+        [HttpPost]
         public async Task<IActionResult> CreateBorrowingRecord([FromRoute] int bookId)
         {
             var userId = User.GetUserId();

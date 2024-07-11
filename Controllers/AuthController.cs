@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Library_Management_System_BackEnd.Entities.Dtos.AuthDto;
 using Library_Management_System_BackEnd.Entities.Mapper;
 using Library_Management_System_BackEnd.Entities.Models;
+using Library_Management_System_BackEnd.Helper.Mail;
 using Library_Management_System_BackEnd.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -19,16 +20,19 @@ namespace Library_Management_System_BackEnd.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ITokenService _tokenService;
+        private readonly IEmailService _emailService;
 
         public AuthController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            ITokenService tokenService
+            ITokenService tokenService,
+            IEmailService emailService
         )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _tokenService = tokenService;
+            _emailService = emailService;
         }
 
         [HttpPost]
@@ -81,8 +85,11 @@ namespace Library_Management_System_BackEnd.Controllers
                 loginDto.Password,
                 false
             );
-            if (!signInResult.Succeeded){
-                Log.Warning($"User Login Failed  INCorrect Password - UserName => {loginDto.UserName}");
+            if (!signInResult.Succeeded)
+            {
+                Log.Warning(
+                    $"User Login Failed  INCorrect Password - UserName => {loginDto.UserName}"
+                );
                 return Unauthorized("Username and/or password is incorrect");
             }
 
@@ -94,7 +101,6 @@ namespace Library_Management_System_BackEnd.Controllers
                     Role = user.Roles
                 }
             );
-
         }
     }
 }

@@ -13,6 +13,13 @@ namespace Library_Management_System_BackEnd.Repository
     {
         private readonly LibraryContext _context = context;
 
+        public async Task CreateReservation(int bookId, string userId)
+        {
+            var reservation = new Reservation { BookId = bookId, UserId = userId };
+            await _context.Reservations.AddAsync(reservation);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<Reservation?> GetCurrentReservation()
         {
             var reservations = _context.Reservations.OrderBy(reser => reser.ReservationDate);
