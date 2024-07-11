@@ -101,3 +101,5 @@ secrets.json
 # Cake - Uncomment if you are using it
 # tools/**/*
 # Addons/**/*
+
+/Uploads
