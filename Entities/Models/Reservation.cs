@@ -14,7 +14,7 @@ namespace Library_Management_System_BackEnd.Entities.Models
         public Book? Book { get; set; }
         public DateTime ReservationDate { get; set; } = DateTime.Now;
         public ReservationStatus Status { get; set; } = ReservationStatus.Pending;
-        public bool NotificationSent { get; set; }
+        public bool NotificationSent { get; set; } = false;
         public DateTime? NotificationTime { get; set; }
     }
 }
