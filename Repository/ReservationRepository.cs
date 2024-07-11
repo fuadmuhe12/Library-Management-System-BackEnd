@@ -28,6 +28,15 @@ namespace Library_Management_System_BackEnd.Repository
                 .FirstAsync();
         }
 
+        public async Task<bool> IsUserReservedBook(string userId, int bookId)
+        {
+            return await _context.Reservations.AnyAsync(reser =>
+                reser.UserId == userId
+                && reser.BookId == bookId
+                && reser.Status == ReservationStatus.Pending
+            );
+        }
+
         public async Task UpdateReservationStatus(int id, ReservationStatus newStatus)
         {
             var reservation = await _context.Reservations.FirstOrDefaultAsync(reser =>

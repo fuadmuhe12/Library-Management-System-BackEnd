@@ -29,6 +29,7 @@ namespace Library_Management_System_BackEnd.Controllers
         /// <returns>An IActionResult representing the result of the operation.</returns>
         /// [HttpPost]
         [Route("create/{bookId:int}")]
+        [HttpPost]
         public async Task<IActionResult> CreateReservation([FromRoute] int bookId)
         {
             var book = await _bookRepository.GetBookByIdAsync(bookId);
@@ -36,12 +37,17 @@ namespace Library_Management_System_BackEnd.Controllers
             {
                 return NotFound("Book not found");
             }
-            if (book.BookStatus != BookStatus.CheckedOut || book.BookStatus != BookStatus.Reserved)
+            if (book.BookStatus != BookStatus.CheckedOut && book.BookStatus != BookStatus.Reserved)
             {
-                return BadRequest("Book is not available for reservation");
+                return BadRequest(
+                    $"Book is not available for reservation the current status is {book.BookStatus}"
+                );
             }
-
             var userId = User.GetUserId();
+            if (await _reservationRepository.IsUserReservedBook(userId, bookId))
+            {
+                return BadRequest("You have already reserved this book");
+            }
             await _reservationRepository.CreateReservation(bookId, userId);
             return Ok("Resevation Created Successfully");
         }

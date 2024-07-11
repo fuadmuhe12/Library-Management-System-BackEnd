@@ -6,10 +6,19 @@ using MimeKit;
 
 namespace Library_Management_System_BackEnd.Services
 {
+      /// <summary>
+    /// Represents a service for sending emails.
+    /// </summary>
     public class EmailService(EmailSettings settings) : IEmailService
+  
     {
         private readonly EmailSettings _settings = settings;
 
+        /// <summary>
+        /// Sends an email asynchronously.
+        /// </summary>
+        /// <param name="mailRequest">The mail request containing the email details.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
         public async Task SendEmailAsync(MailRequest mailRequest)
         {
             var email = new MimeMessage();
@@ -22,7 +31,7 @@ namespace Library_Management_System_BackEnd.Services
             using var smtp = new SmtpClient();
             smtp.Connect(_settings.Host, _settings.Port, SecureSocketOptions.StartTls);
             smtp.Authenticate(_settings.Mail, _settings.Password);
-           var resul =  await smtp.SendAsync(email);
+            var result = await smtp.SendAsync(email);
             smtp.Disconnect(true);
         }
     }
