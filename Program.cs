@@ -19,8 +19,7 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 //Set up email configuration
-DotEnv.Load();
-var emailSettings = FromEnv.MapToEmailSettings();
+
 
 // Add services to the container.
 builder
@@ -33,14 +32,11 @@ builder
             result.ContentTypes.Add("application/json");
             return result;
         };
-    })
-    .AddNewtonsoftJson(options =>
-    {
-        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft
-            .Json
-            .ReferenceLoopHandling
-            .Ignore;
     });
+
+builder.Services.AddEndpointsApiExplorer();
+
+// Add Swagger configuration
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -81,17 +77,11 @@ builder
     .Services.AddControllers()
     .AddNewtonsoftJson(options =>
     {
-        options.SerializerSettings.Converters.Add(new DateOnlyJsonConverter());
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft
+            .Json
+            .ReferenceLoopHandling
+            .Ignore;
     });
-
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-Log.Logger = new LoggerConfiguration()
-    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
-    .CreateLogger();
 
 // Add services to the container.
 builder.Services.AddDbContext<LibraryContext>(options =>
@@ -101,12 +91,6 @@ builder.Services.AddDbContext<LibraryContext>(options =>
         sqlOptions => sqlOptions.EnableRetryOnFailure()
     );
 });
-
-builder.Services.AddHangfire(config =>
-    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
-
-builder.Services.AddHangfireServer();
 
 // Add Identity services to the container
 builder
@@ -146,6 +130,17 @@ builder
             )
         };
     });
+
+
+
+builder.Services.AddHangfire(config =>
+    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
+
+builder.Services.AddHangfireServer();
+DotEnv.Load();
+var emailSettings = FromEnv.MapToEmailSettings();
+
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
@@ -153,8 +148,8 @@ builder.Services.AddScoped<IBookRepository, BookRepository>();
 builder.Services.AddScoped<IConstantRepository, ConstantRepository>();
 builder.Services.AddScoped<IBorrowingRecordRepository, BorrowingRecordRepository>();
 builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
-builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddSingleton(emailSettings);
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IFineRepository, FineRepository>();
 
@@ -174,6 +169,9 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseHangfireDashboard();
 
 app.Run();
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
