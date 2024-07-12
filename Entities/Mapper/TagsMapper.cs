@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -25,6 +26,16 @@ namespace Library_Management_System_BackEnd.Entities.Mapper
                 bookTagDto.BookTags.Add(new BookTag { BookId = bookId, TagId = tagId });
             }
             return bookTagDto;
+        }
+
+        public static ListOfTagsDto MapToTagsList(this ICollection<BookTag>? bookTags)
+        {
+            var Tags = new ListOfTagsDto();
+            foreach (BookTag tag in bookTags!)
+            {
+                Tags.Tags!.Add(tag.Tag!.TagName);
+            }
+            return Tags;
         }
     }
 }

@@ -1,4 +1,4 @@
-using Library_Management_System_BackEnd.Helper.Query.Enums;
+using Library_Management_System_BackEnd.Helper.Enums;
 
 namespace Library_Management_System_BackEnd.Helper.Query
 {

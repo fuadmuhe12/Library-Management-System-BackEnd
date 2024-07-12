@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Library_Management_System_BackEnd.Data;
 using Library_Management_System_BackEnd.Entities.Models;
+using Library_Management_System_BackEnd.Helper.Enums;
+using Library_Management_System_BackEnd.Helper.Query;
 using Library_Management_System_BackEnd.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,7 +22,87 @@ namespace Library_Management_System_BackEnd.Repository
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Reservation?> GetCurrentReservation(int bookId)
+        public async Task<List<Reservation>> GetAllReservation(ReservationQuery query)
+        {
+            var reservations = _context
+                .Reservations.Include(reser => reser.Book)
+                .ThenInclude(book => book!.Author)
+                .Include(reser => reser.Book)
+                .ThenInclude(book => book!.Category)
+                .Include(reser => reser.Book)
+                .ThenInclude(book => book!.BookTags)!
+                .ThenInclude(bookTag => bookTag.Tag)
+                .Include(reser => reser.User)
+                .AsQueryable();
+            if (query.FilterByReservationStaus != null)
+            {
+                reservations = reservations.Where(reser =>
+                    reser.Status == query.FilterByReservationStaus
+                );
+            }
+            if (query.Search && query.SearchValue != null)
+            {
+                switch (query.SearchBy)
+                {
+                    case SearchBy.Title:
+                        reservations = reservations.Where(reser =>
+                            reser.Book!.Title.Contains(query.SearchValue!)
+                        );
+                        break;
+                    case SearchBy.Author:
+                        reservations = reservations.Where(reser =>
+                            reser.Book!.Author!.AuthorName.Contains(query.SearchValue!)
+                        );
+                        break;
+                    case SearchBy.ISBN:
+                        reservations = reservations.Where(reser =>
+                            reser.Book!.ISBN.Contains(query.SearchValue!)
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (query.FilterByTags != null)
+            {
+                reservations = reservations.Where(reser =>
+                    reser.Book!.BookTags!.Any(bookTag =>
+                        query
+                            .FilterByTags.Select(tags => tags.ToString())
+                            .Contains(bookTag.Tag!.TagName)
+                    )
+                );
+            }
+            if (query.SortBy != null)
+            {
+                if (query.SortBy == SortByReservation.BookName)
+                {
+                    reservations = query.IsDecensing
+                        ? reservations.OrderByDescending(reser => reser.Book!.Title)
+                        : reservations.OrderBy(reser => reser.Book!.Title);
+                }
+                if (query.SortBy == SortByReservation.AuthorName)
+                {
+                    reservations = query.IsDecensing
+                        ? reservations.OrderByDescending(reser => reser.Book!.Author!.AuthorName)
+                        : reservations.OrderBy(reser => reser.Book!.Author!.AuthorName);
+                }
+                if (query.SortBy == SortByReservation.ReservationDate)
+                {
+                    reservations = query.IsDecensing
+                        ? reservations.OrderByDescending(reser => reser.ReservationDate)
+                        : reservations.OrderBy(reser => reser.ReservationDate);
+                }
+            }
+
+            var skip = (query.PageNumber - 1) * query.PageSize;
+            var take = query.PageSize;
+            reservations = reservations.Skip(skip).Take(take);
+            return await reservations.ToListAsync();
+        }
+
+        public async Task<Reservation?> GetBookReservation(int bookId)
         {
             var reservations = _context.Reservations.OrderBy(reser => reser.ReservationDate);
             try
@@ -39,6 +121,16 @@ namespace Library_Management_System_BackEnd.Repository
             }
         }
 
+        public Task<List<Reservation>> GetBooksReservation(int bookId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Reservation?> GetCurrentReservation(int bookId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<Reservation?> GetReservationById(int id)
         {
             return await _context.Reservations.FirstOrDefaultAsync(reser =>
@@ -52,6 +144,88 @@ namespace Library_Management_System_BackEnd.Repository
                 .Reservations.Include(res => res.Book)
                 .Where(reser => reser.Status == ReservationStatus.Pending && reser.BookId == bookId)
                 .ToListAsync();
+        }
+
+        public async Task<List<Reservation>> GetUserReservation(string userId, ReservationQuery query)
+        {
+            var reservations = _context
+                .Reservations
+                .Where(reser => reser.UserId == userId)
+                .Include(reser => reser.Book)
+                .ThenInclude(book => book!.Author)
+                .Include(reser => reser.Book)
+                .ThenInclude(book => book!.Category)
+                .Include(reser => reser.Book)
+                .ThenInclude(book => book!.BookTags)!
+                .ThenInclude(bookTag => bookTag.Tag)
+                .Include(reser => reser.User)
+                .AsQueryable();
+            if (query.FilterByReservationStaus != null)
+            {
+                reservations = reservations.Where(reser =>
+                    reser.Status == query.FilterByReservationStaus
+                );
+            }
+            if (query.Search && query.SearchValue != null)
+            {
+                switch (query.SearchBy)
+                {
+                    case SearchBy.Title:
+                        reservations = reservations.Where(reser =>
+                            reser.Book!.Title.Contains(query.SearchValue!)
+                        );
+                        break;
+                    case SearchBy.Author:
+                        reservations = reservations.Where(reser =>
+                            reser.Book!.Author!.AuthorName.Contains(query.SearchValue!)
+                        );
+                        break;
+                    case SearchBy.ISBN:
+                        reservations = reservations.Where(reser =>
+                            reser.Book!.ISBN.Contains(query.SearchValue!)
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (query.FilterByTags != null)
+            {
+                reservations = reservations.Where(reser =>
+                    reser.Book!.BookTags!.Any(bookTag =>
+                        query
+                            .FilterByTags.Select(tags => tags.ToString())
+                            .Contains(bookTag.Tag!.TagName)
+                    )
+                );
+            }
+            if (query.SortBy != null)
+            {
+                if (query.SortBy == SortByReservation.BookName)
+                {
+                    reservations = query.IsDecensing
+                        ? reservations.OrderByDescending(reser => reser.Book!.Title)
+                        : reservations.OrderBy(reser => reser.Book!.Title);
+                }
+                if (query.SortBy == SortByReservation.AuthorName)
+                {
+                    reservations = query.IsDecensing
+                        ? reservations.OrderByDescending(reser => reser.Book!.Author!.AuthorName)
+                        : reservations.OrderBy(reser => reser.Book!.Author!.AuthorName);
+                }
+                if (query.SortBy == SortByReservation.ReservationDate)
+                {
+                    reservations = query.IsDecensing
+                        ? reservations.OrderByDescending(reser => reser.ReservationDate)
+                        : reservations.OrderBy(reser => reser.ReservationDate);
+                }
+            }
+
+            var skip = (query.PageNumber - 1) * query.PageSize;
+            var take = query.PageSize;
+            reservations = reservations.Skip(skip).Take(take);
+            return await reservations.ToListAsync();
         }
 
         public async Task<bool> IsUserReservedBook(string userId, int bookId)

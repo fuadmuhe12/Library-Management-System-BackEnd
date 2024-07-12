@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Library_Management_System_BackEnd.Entities.Dtos.TagsDto;
 
 namespace Library_Management_System_BackEnd.Entities.Dtos.BookDto
 {
@@ -17,6 +18,6 @@ namespace Library_Management_System_BackEnd.Entities.Dtos.BookDto
         public DateOnly PublicationYear { get; set; }
         public string Description { get; set; } = string.Empty;
         public string CoverImage { get; set; } = string.Empty;
-        public List<ViewTagDto> Tags { get; set; } = [];
+        public ListOfTagsDto? Tags { get; set; } 
     }
 }

@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Library_Management_System_BackEnd.Entities.Mapper;
 using Library_Management_System_BackEnd.Entities.Models;
 using Library_Management_System_BackEnd.Extensions;
+using Library_Management_System_BackEnd.Helper.Query;
 using Library_Management_System_BackEnd.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -37,7 +39,7 @@ namespace Library_Management_System_BackEnd.Controllers
         {
             var userId = User.GetUserId();
             var book = await _bookRepository.GetBookByIdAsync(bookId);
-            
+
             if (book == null)
             {
                 return NotFound("Book not found");
@@ -65,12 +67,23 @@ namespace Library_Management_System_BackEnd.Controllers
         }
 
         [HttpGet]
-        [Route("{bookId:int}")]
-        public async Task<IActionResult> GetReservations([FromRoute] int bookId)
+        [Route("admin")]
+        [Authorize(Roles = "Admin")]
+
+        public async Task<IActionResult> GetReservationsAdmin([FromQuery] ReservationQuery query)
         {
-            var userId = User.GetUserId();
-            var reservations = await _reservationRepository.GetReservations(bookId);
-            return Ok(reservations);
+            var reservations = await _reservationRepository.GetAllReservation(query);
+            return Ok(reservations.Select(reser => reser.MapToViewReservation()));
+        }
+
+        [HttpGet]
+        [Route("user")]
+        [Authorize]
+
+        public async Task<IActionResult> GetReservationsUser([FromQuery] ReservationQuery query)
+        {
+            var reservations = await _reservationRepository.GetAllReservation(query);
+            return Ok(reservations.Select(reser => reser.MapToViewReservation()));
         }
     }
 }

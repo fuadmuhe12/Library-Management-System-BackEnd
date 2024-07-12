@@ -42,7 +42,7 @@ namespace Library_Management_System_BackEnd.Entities.Mapper
 
         public static Book MapToBookFromUpdate(
             this UpdateBookDto bookDto,
-            string coverImagePath ,
+            string coverImagePath,
             int bookId
         )
         {
@@ -72,7 +72,7 @@ namespace Library_Management_System_BackEnd.Entities.Mapper
                 PublicationYear = book.PublicationYear,
                 Description = book.Description,
                 CoverImage = book.CoverImage,
-                Tags = book.BookTags!.Select(bookTag => bookTag.Tag!.MapToViewTagDto()).ToList()
+                Tags = book.BookTags.MapToTagsList()
             };
         }
     }

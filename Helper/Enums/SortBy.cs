@@ -1,4 +1,4 @@
-namespace Library_Management_System_BackEnd.Helper.Query
+namespace Library_Management_System_BackEnd.Helper.Enums
 {
     public enum SortBy
     {
