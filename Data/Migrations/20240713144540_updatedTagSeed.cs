@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Library_Management_System_BackEnd.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class updatedTagSeed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -383,8 +383,8 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "73fa9b3b-a0b7-4fa5-b838-2cbe2c371a11", null, "Admin", "ADMIN" },
-                    { "db1017a8-bc41-4552-bb19-21149cd8fe11", null, "User", "USER" }
+                    { "27b24a55-f706-48ef-835b-f81c8218231f", null, "User", "USER" },
+                    { "55129b2a-eb23-403a-aa94-486c65bbdbee", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
@@ -393,7 +393,7 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                 values: new object[,]
                 {
                     { 1, "Fiction" },
-                    { 2, "Non-Fiction" },
+                    { 2, "Non_Fiction" },
                     { 3, "Children" },
                     { 4, "Young Adult" },
                     { 5, "Academic" }
@@ -407,20 +407,20 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     { 1, "Adventure" },
                     { 2, "Mystery" },
                     { 3, "Romance" },
-                    { 4, "Science Fiction" },
+                    { 4, "Science_Fiction" },
                     { 5, "Fantasy" },
                     { 6, "Thriller" },
                     { 7, "Historical" },
-                    { 8, "Coming of Age" },
+                    { 8, "Coming_of_Age" },
                     { 9, "Bestsellers" },
-                    { 10, "New Arrivals" },
-                    { 11, "Award Winners" },
-                    { 12, "E-book" },
+                    { 10, "New_Arrivals" },
+                    { 11, "Award_Winners" },
+                    { 12, "Ebook" },
                     { 13, "Audiobook" },
                     { 14, "Hardcover" },
                     { 15, "Paperback" },
                     { 16, "English" },
-                    { 17, "Mental Health" },
+                    { 17, "Mental_Health" },
                     { 18, "Environmental" }
                 });
 

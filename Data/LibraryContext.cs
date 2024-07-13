@@ -45,7 +45,7 @@ namespace Library_Management_System_BackEnd.Data
             var categories = new Category[]
             {
                 new() { CategoryName = "Fiction", CategoryId = 1 },
-                new() { CategoryName = "Non-Fiction", CategoryId = 2 },
+                new() { CategoryName = "Non_Fiction", CategoryId = 2 },
                 new() { CategoryName = "Children", CategoryId = 3 },
                 new() { CategoryName = "Young Adult", CategoryId = 4 },
                 new() { CategoryName = "Academic", CategoryId = 5 }
@@ -59,20 +59,20 @@ namespace Library_Management_System_BackEnd.Data
                 new() { TagId = 1, TagName = "Adventure" },
                 new() { TagId = 2, TagName = "Mystery" },
                 new() { TagId = 3, TagName = "Romance" },
-                new() { TagId = 4, TagName = "Science Fiction" },
+                new() { TagId = 4, TagName = "Science_Fiction" },
                 new() { TagId = 5, TagName = "Fantasy" },
                 new() { TagId = 6, TagName = "Thriller" },
                 new() { TagId = 7, TagName = "Historical" },
-                new() { TagId = 8, TagName = "Coming of Age" },
+                new() { TagId = 8, TagName = "Coming_of_Age" },
                 new() { TagId = 9, TagName = "Bestsellers" },
-                new() { TagId = 10, TagName = "New Arrivals" },
-                new() { TagId = 11, TagName = "Award Winners" },
-                new() { TagId = 12, TagName = "E-book" },
+                new() { TagId = 10, TagName = "New_Arrivals" },
+                new() { TagId = 11, TagName = "Award_Winners" },
+                new() { TagId = 12, TagName = "Ebook" },
                 new() { TagId = 13, TagName = "Audiobook" },
                 new() { TagId = 14, TagName = "Hardcover" },
                 new() { TagId = 15, TagName = "Paperback" },
                 new() { TagId = 16, TagName = "English" },
-                new() { TagId = 17, TagName = "Mental Health" },
+                new() { TagId = 17, TagName = "Mental_Health" },
                 new() { TagId = 18, TagName = "Environmental" }
             };
             builder.Entity<Tag>().HasData(tags);

@@ -163,7 +163,7 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         new
                         {
                             CategoryId = 2,
-                            CategoryName = "Non-Fiction"
+                            CategoryName = "Non_Fiction"
                         },
                         new
                         {
@@ -327,7 +327,7 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         new
                         {
                             TagId = 4,
-                            TagName = "Science Fiction"
+                            TagName = "Science_Fiction"
                         },
                         new
                         {
@@ -347,7 +347,7 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         new
                         {
                             TagId = 8,
-                            TagName = "Coming of Age"
+                            TagName = "Coming_of_Age"
                         },
                         new
                         {
@@ -357,17 +357,17 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         new
                         {
                             TagId = 10,
-                            TagName = "New Arrivals"
+                            TagName = "New_Arrivals"
                         },
                         new
                         {
                             TagId = 11,
-                            TagName = "Award Winners"
+                            TagName = "Award_Winners"
                         },
                         new
                         {
                             TagId = 12,
-                            TagName = "E-book"
+                            TagName = "Ebook"
                         },
                         new
                         {
@@ -392,7 +392,7 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                         new
                         {
                             TagId = 17,
-                            TagName = "Mental Health"
+                            TagName = "Mental_Health"
                         },
                         new
                         {
@@ -430,13 +430,13 @@ namespace Library_Management_System_BackEnd.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "73fa9b3b-a0b7-4fa5-b838-2cbe2c371a11",
+                            Id = "55129b2a-eb23-403a-aa94-486c65bbdbee",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "db1017a8-bc41-4552-bb19-21149cd8fe11",
+                            Id = "27b24a55-f706-48ef-835b-f81c8218231f",
                             Name = "User",
                             NormalizedName = "USER"
                         });

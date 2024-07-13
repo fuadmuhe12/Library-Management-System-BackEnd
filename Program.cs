@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using dotenv.net;
 using Hangfire;
 using Library_Management_System_BackEnd.Data;
@@ -32,6 +33,10 @@ builder
             result.ContentTypes.Add("application/json");
             return result;
         };
+    })
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -71,6 +76,7 @@ builder.Services.AddSwaggerGen(c =>
     };
 
     c.AddSecurityRequirement(securityRequirement);
+    c.SchemaFilter<EnumSchemaFilter>();
 });
 
 builder
@@ -91,6 +97,9 @@ builder.Services.AddDbContext<LibraryContext>(options =>
         sqlOptions => sqlOptions.EnableRetryOnFailure()
     );
 });
+builder.Services.AddHangfire(config =>
+    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 
 // Add Identity services to the container
 builder
@@ -131,12 +140,6 @@ builder
         };
     });
 
-
-
-builder.Services.AddHangfire(config =>
-    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
-
 builder.Services.AddHangfireServer();
 DotEnv.Load();
 var emailSettings = FromEnv.MapToEmailSettings();
@@ -169,6 +172,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseHangfireDashboard();
 
 app.Run();
 

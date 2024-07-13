@@ -3,6 +3,7 @@ using Library_Management_System_BackEnd.Entities.Mapper;
 using Library_Management_System_BackEnd.Entities.Models;
 using Library_Management_System_BackEnd.Helper.Query;
 using Library_Management_System_BackEnd.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -16,6 +17,7 @@ namespace Library_Management_System_BackEnd.Controllers
         const string _GetAuthorPath = "GetAuthorById";
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllAuthors([FromQuery] AuthorQuery query)
         {
             var authors = await _authorRepository.GetAllAuthors(query);

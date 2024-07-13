@@ -128,7 +128,17 @@ namespace Library_Management_System_BackEnd.Repository
 
         public Task<Reservation?> GetCurrentReservation(int bookId)
         {
-            throw new NotImplementedException();
+            var reserv = _context
+                .Reservations.Where(reser =>
+                    reser.BookId == bookId && reser.Status == ReservationStatus.Pending
+                )
+                .Include(res => res.User)
+                .Include(res => res.Book)
+                .Include(res => res.Book!.Author)
+                .Include(res => res.Book!.Category)
+                .Include(res => res.Book!.BookTags)!
+                .ThenInclude(bookTag => bookTag.Tag);
+            return reserv.FirstOrDefaultAsync();
         }
 
         public async Task<Reservation?> GetReservationById(int id)
@@ -146,11 +156,13 @@ namespace Library_Management_System_BackEnd.Repository
                 .ToListAsync();
         }
 
-        public async Task<List<Reservation>> GetUserReservation(string userId, ReservationQuery query)
+        public async Task<List<Reservation>> GetUserReservation(
+            string userId,
+            ReservationQuery query
+        )
         {
             var reservations = _context
-                .Reservations
-                .Where(reser => reser.UserId == userId)
+                .Reservations.Where(reser => reser.UserId == userId)
                 .Include(reser => reser.Book)
                 .ThenInclude(book => book!.Author)
                 .Include(reser => reser.Book)

@@ -68,8 +68,7 @@ namespace Library_Management_System_BackEnd.Controllers
 
         [HttpGet]
         [Route("admin")]
-        [Authorize(Roles = "Admin")]
-
+        [Authorize]
         public async Task<IActionResult> GetReservationsAdmin([FromQuery] ReservationQuery query)
         {
             var reservations = await _reservationRepository.GetAllReservation(query);
@@ -79,10 +78,10 @@ namespace Library_Management_System_BackEnd.Controllers
         [HttpGet]
         [Route("user")]
         [Authorize]
-
         public async Task<IActionResult> GetReservationsUser([FromQuery] ReservationQuery query)
         {
-            var reservations = await _reservationRepository.GetAllReservation(query);
+            var userId = User.GetUserId();
+            var reservations = await _reservationRepository.GetUserReservation(userId, query);
             return Ok(reservations.Select(reser => reser.MapToViewReservation()));
         }
     }
