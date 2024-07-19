@@ -5,7 +5,7 @@ using Hangfire;
 using Library_Management_System_BackEnd.Data;
 using Library_Management_System_BackEnd.Entities.Mapper;
 using Library_Management_System_BackEnd.Entities.Models;
-using Library_Management_System_BackEnd.Helper.Json;
+using Library_Management_System_BackEnd.Helper.Extension;
 using Library_Management_System_BackEnd.Interfaces;
 using Library_Management_System_BackEnd.Repository;
 using Library_Management_System_BackEnd.Services;
@@ -155,6 +155,7 @@ builder.Services.AddSingleton(emailSettings);
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 builder.Services.AddScoped<IFineRepository, FineRepository>();
+builder.Services.AddScoped<IBackgroundService, BackgroundServiceLMS>();
 
 var app = builder.Build();
 
@@ -173,9 +174,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.UseHangfireDashboard();
+app.CreateAdminUser();
+app.RemindUser();
 
 app.Run();
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.File("logs/log-.txt", rollingInterval: RollingInterval.Day)
     .CreateLogger();
+

@@ -4,6 +4,6 @@ namespace Library_Management_System_BackEnd.Helper.Enums
     {
         BookName,
         AuthorName,
-        ReservationDate
+        Date
     }
 }

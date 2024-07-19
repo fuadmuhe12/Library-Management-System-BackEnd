@@ -43,6 +43,7 @@ namespace Library_Management_System_BackEnd.Controllers
             var createResult = await _userManager.CreateAsync(user, registerDto.Password);
             if (createResult.Succeeded)
             {
+                var createdUser =  await _userManager.FindByEmailAsync(user.Email!);
                 Log.Information($"new User created {registerDto.Email}");
                 var roleResult = await _userManager.AddToRoleAsync(
                     user,
@@ -57,9 +58,9 @@ namespace Library_Management_System_BackEnd.Controllers
                 return Ok(
                     new UserLoginResponceDto
                     {
-                        Token = _tokenService.GenerateToken(user),
+                        Token = await _tokenService.GenerateToken(user),
                         UserName = user.UserName!,
-                        Role = user.Roles
+                        Role = await _userManager.GetRolesAsync(createdUser!)
                     }
                 );
             }
@@ -96,9 +97,9 @@ namespace Library_Management_System_BackEnd.Controllers
             return Ok(
                 new UserLoginResponceDto
                 {
-                    Token = _tokenService.GenerateToken(user),
+                    Token = await _tokenService.GenerateToken(user),
                     UserName = user.UserName!,
-                    Role = user.Roles
+                    Role = await _userManager.GetRolesAsync(user)
                 }
             );
         }

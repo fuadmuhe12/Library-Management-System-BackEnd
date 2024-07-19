@@ -23,5 +23,19 @@ namespace Library_Management_System_BackEnd.Entities.Mapper
                 BorrowingRecordId = record.BorrowingRecordId
             };
         }
+
+        public static ViewBorrowingRecord MapToViewRecord(this BorrowingRecord borrowingRecord)
+        {
+            return new ViewBorrowingRecord
+            {
+                BorrowingRecordId = borrowingRecord.BorrowingRecordId,
+                Book = borrowingRecord.Book!.ToViewFromBook(),
+                User = borrowingRecord.User!.MapToUserMinimalDto(),
+                IssueDate = borrowingRecord.IssueDate,
+                DueDate = borrowingRecord.DueDate,
+                IsReturned = borrowingRecord.IsReturned,
+                ReturnDate = borrowingRecord.ReturnDate
+            };
+        }
     }
 }

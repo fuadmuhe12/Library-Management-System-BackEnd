@@ -10,6 +10,5 @@ namespace Library_Management_System_BackEnd.Entities.Models
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
-        public string Roles { get; set; } = LMSUserRoles.User.ToString();
     }
 }

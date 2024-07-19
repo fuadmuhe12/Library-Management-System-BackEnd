@@ -9,5 +9,6 @@ namespace Library_Management_System_BackEnd.Interfaces
     public interface IFineRepository
     {
         Task<Fine> CreateFine(Fine fine);
+        Task<List<Fine>> GetAllUnpaidFines();
     }
 }

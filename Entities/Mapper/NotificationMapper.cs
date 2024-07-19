@@ -18,5 +18,15 @@ namespace Library_Management_System_BackEnd.Entities.Mapper
                 Body = notification.Message
             };
         }
+        public static Notification MapToNotification(this MailRequest mail,string userID)
+        {
+            return new Notification
+            {
+               UserId = userID,
+               Message = mail.Body,
+               Subject = mail.Subject,
+
+            };
+        }
     }
 }

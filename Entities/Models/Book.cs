@@ -10,7 +10,7 @@ namespace Library_Management_System_BackEnd.Entities.Models
     public class Book
     {
         public int BookId { get; set; }
-        required public string Title { get; set; } 
+        required public string Title { get; set; }
         public int AuthorId { get; set; }
         public Author? Author { get; set; }
         public string ISBN { get; set; } = string.Empty;

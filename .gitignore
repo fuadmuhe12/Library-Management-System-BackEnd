@@ -1,7 +1,7 @@
 # .NET and Visual Studio
 # Ignore build outputs and user-specific files
-bin/
-obj/
+bin
+obj
 *.user
 *.suo
 *.userosscache

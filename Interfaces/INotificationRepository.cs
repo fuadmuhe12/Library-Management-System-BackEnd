@@ -9,5 +9,6 @@ namespace Library_Management_System_BackEnd.Interfaces
     public interface INotificationRepository
     {
         Task<Notification> CreateNotification(string userId, string subject, string message);
+        
     }
 }

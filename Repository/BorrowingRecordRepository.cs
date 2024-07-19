@@ -2,11 +2,14 @@ using Hangfire;
 using Library_Management_System_BackEnd.Data;
 using Library_Management_System_BackEnd.Entities.Mapper;
 using Library_Management_System_BackEnd.Entities.Models;
+using Library_Management_System_BackEnd.Helper.Enums;
 using Library_Management_System_BackEnd.Helper.Mail;
+using Library_Management_System_BackEnd.Helper.Query;
 using Library_Management_System_BackEnd.Helper.Response;
 using Library_Management_System_BackEnd.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using Serilog;
 
 namespace Library_Management_System_BackEnd.Repository
@@ -18,16 +21,18 @@ namespace Library_Management_System_BackEnd.Repository
         UserManager<User> userManager,
         IEmailService emailService,
         INotificationRepository notificationRepo,
-        IFineRepository fineRepo
+        IFineRepository fineRepo,
+        IConfiguration config
     ) : IBorrowingRecordRepository
     {
-        public  LibraryContext _context = context;
-        public  IBookRepository _bookRepo = bookRepo;
-        public  IReservationRepository _reservationRepo = reservationRepo;
-        public  UserManager<User> _userManager = userManager;
-        public  IEmailService _emailService = emailService;
-        public  INotificationRepository _notificationRepo = notificationRepo;
-        public  IFineRepository _fineRepo = fineRepo;
+        public LibraryContext _context = context;
+        public IBookRepository _bookRepo = bookRepo;
+        public IReservationRepository _reservationRepo = reservationRepo;
+        public UserManager<User> _userManager = userManager;
+        public IEmailService _emailService = emailService;
+        public INotificationRepository _notificationRepo = notificationRepo;
+        public IFineRepository _fineRepo = fineRepo;
+        private readonly IConfiguration _config = config;
 
         public async Task<BorrowingRecordResponce> CreateBorrowingRecord(BorrowingRecord record)
         {
@@ -81,29 +86,29 @@ namespace Library_Management_System_BackEnd.Repository
 
         public async Task RemindUser(string userId, int bookId, Reservation? firstResevation)
         {
-            
             Log.Information("Reminding user with id {userId} and book id {bookId}", userId, bookId);
             await _bookRepo.UpdateBookStatus(bookId, BookStatus.Reserved);
 
             var notification = await _notificationRepo.CreateNotification(
                 userId,
                 "Book Availability",
-                $"Dear {firstResevation.User!.FirstName},\n\nWe are pleased to inform you that the book \"{firstResevation.Book!.Title}\" is now available for pickup. Please collect it within the next 5 hours to ensure it remains reserved for you. If you are unable to do so, the book will be made available to the next person in line.\n\nThank you for using our library services."
+                $"Dear {firstResevation!.User!.FirstName},\n\nWe are pleased to inform you that the book \"{firstResevation.Book!.Title}\" is now available for pickup. Please collect it within the next {_config["AppConfig:ResevationExipireHour"]} hours to ensure it remains reserved for you. If you are unable to do so, the book will be made available to the next person in line.\n\nThank you for using our library services."
             );
             var mailRequest = notification.MapToMailRequest(firstResevation.User!.Email!);
             await _emailService.SendEmailAsync(mailRequest);
 
             BackgroundJob.Schedule(
                 () => RemoveCurrentReservation(firstResevation.ReservationId, bookId),
-                TimeSpan.FromSeconds(10)
+                TimeSpan.FromDays(int.Parse(_config["AppConfig:ResevationExipireHour"]!))
             );
         }
 
         public async Task FineUser(string userId, BorrowingRecord? record)
         {
-            var diff = (record.ReturnDate - record.DueDate).Value.Days;
+            var diff = (record!.ReturnDate! - record.DueDate).Value.Days;
             decimal fineAmaont = diff * 0.5m;
             var fine = record.MapToFine(fineAmaont);
+
             var resultFine = await _fineRepo.CreateFine(fine);
 
             var notification = await _notificationRepo.CreateNotification(
@@ -138,6 +143,104 @@ namespace Library_Management_System_BackEnd.Repository
                     }
                 }
             }
+        }
+
+        public async Task<List<BorrowingRecord>> GetAllBorrowingRecord(DateTime Deadline)
+        {
+            return await _context
+                .BorrowingRecords.Include(record => record.Book)
+                .Include(record => record.Book!.Author)
+                .Include(record => record.User)
+                .Where(record =>
+                    record.DueDate <= Deadline
+                    && record.IsReturned == false
+                    && DateTime.Now < record.DueDate
+                )
+                .ToListAsync();
+        }
+
+        public async Task<List<BorrowingRecord>> GetAllUserBorrowRecord(
+            string userId,
+            BorrowingRecordQuery query
+        )
+        {
+            var borrows = _context
+                .BorrowingRecords.Include(reser => reser.Book)
+                .ThenInclude(book => book!.Author)
+                .Include(reser => reser.Book)
+                .ThenInclude(book => book!.Category)
+                .Include(reser => reser.Book)
+                .ThenInclude(book => book!.BookTags)!
+                .ThenInclude(bookTag => bookTag.Tag)
+                .Include(reser => reser.User)
+                .Where(borrow => borrow.UserId == userId)
+                .AsQueryable();
+
+            if (query.Search && query.SearchValue != null)
+            {
+                switch (query.SearchBy)
+                {
+                    case SearchBy.Title:
+                        borrows = borrows.Where(reser =>
+                            reser.Book!.Title.Contains(query.SearchValue!)
+                        );
+                        break;
+                    case SearchBy.Author:
+                        borrows = borrows.Where(reser =>
+                            reser.Book!.Author!.AuthorName.Contains(query.SearchValue!)
+                        );
+                        break;
+                    case SearchBy.ISBN:
+                        borrows = borrows.Where(reser =>
+                            reser.Book!.ISBN.Contains(query.SearchValue!)
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (query.IsReturned != null)
+            {
+                borrows = borrows.Where(borrow => borrow.IsReturned == query.IsReturned);
+            }
+
+            if (query.FilterByTags != null)
+            {
+                borrows = borrows.Where(reser =>
+                    reser.Book!.BookTags!.Any(bookTag =>
+                        query
+                            .FilterByTags.Select(tags => tags.ToString())
+                            .Contains(bookTag.Tag!.TagName)
+                    )
+                );
+            }
+            if (query.SortBy != null)
+            {
+                if (query.SortBy == SortByReservation.BookName)
+                {
+                    borrows = query.IsDecensing
+                        ? borrows.OrderByDescending(reser => reser.Book!.Title)
+                        : borrows.OrderBy(reser => reser.Book!.Title);
+                }
+                if (query.SortBy == SortByReservation.AuthorName)
+                {
+                    borrows = query.IsDecensing
+                        ? borrows.OrderByDescending(reser => reser.Book!.Author!.AuthorName)
+                        : borrows.OrderBy(reser => reser.Book!.Author!.AuthorName);
+                }
+                if (query.SortBy == SortByReservation.Date)
+                {
+                    borrows = query.IsDecensing
+                        ? borrows.OrderByDescending(reser => reser.IssueDate)
+                        : borrows.OrderBy(reser => reser.IssueDate);
+                }
+            }
+
+            var skip = (query.PageNumber - 1) * query.PageSize;
+            var take = query.PageSize;
+            borrows = borrows.Skip(skip).Take(take);
+            return await borrows.ToListAsync();
         }
     }
 }

@@ -6,9 +6,11 @@ using Library_Management_System_BackEnd.Entities.Dtos.BorrowingRecordDto;
 using Library_Management_System_BackEnd.Entities.Mapper;
 using Library_Management_System_BackEnd.Entities.Models;
 using Library_Management_System_BackEnd.Extensions;
+using Library_Management_System_BackEnd.Helper.Query;
 using Library_Management_System_BackEnd.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 
 namespace Library_Management_System_BackEnd.Controllers
 {
@@ -99,6 +101,17 @@ namespace Library_Management_System_BackEnd.Controllers
             {
                 return StatusCode(500, e.Message);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetBorrowedBooksUser(
+            [FromQuery] BorrowingRecordQuery query
+        )
+        {
+            var userId = User.GetUserId();
+            var borrowsResult = await _borrowingRecord.GetAllUserBorrowRecord(userId, query);
+            var finalviewBorrows = borrowsResult.Select(record => record.MapToViewRecord());
+            return Ok(finalviewBorrows);
         }
     }
 }

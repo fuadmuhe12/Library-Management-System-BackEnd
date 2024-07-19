@@ -15,6 +15,6 @@ namespace Library_Management_System_BackEnd.Entities.Models
         public DateTime IssueDate { get; set; } = DateTime.Now;
         public DateTime DueDate { get; set; } = DateTime.Now.AddMicroseconds(14);
         public DateTime? ReturnDate { get; set; }
-        public bool IsReturned { get; set; } = false; //TODO: BorrowingRecord Update
+        public bool IsReturned { get; set; } = false; 
     }
 }

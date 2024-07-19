@@ -88,7 +88,7 @@ namespace Library_Management_System_BackEnd.Repository
                         ? reservations.OrderByDescending(reser => reser.Book!.Author!.AuthorName)
                         : reservations.OrderBy(reser => reser.Book!.Author!.AuthorName);
                 }
-                if (query.SortBy == SortByReservation.ReservationDate)
+                if (query.SortBy == SortByReservation.Date)
                 {
                     reservations = query.IsDecensing
                         ? reservations.OrderByDescending(reser => reser.ReservationDate)
@@ -226,7 +226,7 @@ namespace Library_Management_System_BackEnd.Repository
                         ? reservations.OrderByDescending(reser => reser.Book!.Author!.AuthorName)
                         : reservations.OrderBy(reser => reser.Book!.Author!.AuthorName);
                 }
-                if (query.SortBy == SortByReservation.ReservationDate)
+                if (query.SortBy == SortByReservation.Date)
                 {
                     reservations = query.IsDecensing
                         ? reservations.OrderByDescending(reser => reser.ReservationDate)
