@@ -104,13 +104,26 @@ namespace Library_Management_System_BackEnd.Controllers
         }
 
         [HttpGet]
+        [Route("User")]
         public async Task<IActionResult> GetBorrowedBooksUser(
             [FromQuery] BorrowingRecordQuery query
         )
         {
             var userId = User.GetUserId();
-            var borrowsResult = await _borrowingRecord.GetAllUserBorrowRecord(userId, query);
-            var finalviewBorrows = borrowsResult.Select(record => record.MapToViewRecord());
+            var borrowingResult = await _borrowingRecord.GetAllUserBorrowRecord(userId, query);
+            var finalviewBorrows = borrowingResult.Select(record => record.MapToViewRecord());
+            return Ok(finalviewBorrows);
+        }
+        [HttpGet]
+        [Route("Admin")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetBorrowedBooksAdmin(
+            [FromQuery] BorrowingRecordQuery query
+        )
+        {
+            var userId = User.GetUserId();
+            var borrowingResult = await _borrowingRecord.GetAllBorrowRecord( query);
+            var finalviewBorrows = borrowingResult.Select(record => record.MapToViewRecord());
             return Ok(finalviewBorrows);
         }
     }

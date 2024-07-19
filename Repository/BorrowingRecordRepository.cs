@@ -242,5 +242,86 @@ namespace Library_Management_System_BackEnd.Repository
             borrows = borrows.Skip(skip).Take(take);
             return await borrows.ToListAsync();
         }
+
+        public async Task<List<BorrowingRecord>> GetAllBorrowRecord(BorrowingRecordQuery query)
+        {
+            
+            var borrows = _context
+                .BorrowingRecords.Include(reser => reser.Book)
+                .ThenInclude(book => book!.Author)
+                .Include(reser => reser.Book)
+                .ThenInclude(book => book!.Category)
+                .Include(reser => reser.Book)
+                .ThenInclude(book => book!.BookTags)!
+                .ThenInclude(bookTag => bookTag.Tag)
+                .Include(reser => reser.User)
+                .AsQueryable();
+
+            if (query.Search && query.SearchValue != null)
+            {
+                switch (query.SearchBy)
+                {
+                    case SearchBy.Title:
+                        borrows = borrows.Where(reser =>
+                            reser.Book!.Title.Contains(query.SearchValue!)
+                        );
+                        break;
+                    case SearchBy.Author:
+                        borrows = borrows.Where(reser =>
+                            reser.Book!.Author!.AuthorName.Contains(query.SearchValue!)
+                        );
+                        break;
+                    case SearchBy.ISBN:
+                        borrows = borrows.Where(reser =>
+                            reser.Book!.ISBN.Contains(query.SearchValue!)
+                        );
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            if (query.IsReturned != null)
+            {
+                borrows = borrows.Where(borrow => borrow.IsReturned == query.IsReturned);
+            }
+
+            if (query.FilterByTags != null)
+            {
+                borrows = borrows.Where(reser =>
+                    reser.Book!.BookTags!.Any(bookTag =>
+                        query
+                            .FilterByTags.Select(tags => tags.ToString())
+                            .Contains(bookTag.Tag!.TagName)
+                    )
+                );
+            }
+            if (query.SortBy != null)
+            {
+                if (query.SortBy == SortByReservation.BookName)
+                {
+                    borrows = query.IsDecensing
+                        ? borrows.OrderByDescending(reser => reser.Book!.Title)
+                        : borrows.OrderBy(reser => reser.Book!.Title);
+                }
+                if (query.SortBy == SortByReservation.AuthorName)
+                {
+                    borrows = query.IsDecensing
+                        ? borrows.OrderByDescending(reser => reser.Book!.Author!.AuthorName)
+                        : borrows.OrderBy(reser => reser.Book!.Author!.AuthorName);
+                }
+                if (query.SortBy == SortByReservation.Date)
+                {
+                    borrows = query.IsDecensing
+                        ? borrows.OrderByDescending(reser => reser.IssueDate)
+                        : borrows.OrderBy(reser => reser.IssueDate);
+                }
+            }
+
+            var skip = (query.PageNumber - 1) * query.PageSize;
+            var take = query.PageSize;
+            borrows = borrows.Skip(skip).Take(take);
+            return await borrows.ToListAsync();
+        }
     }
 }

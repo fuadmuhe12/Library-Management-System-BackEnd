@@ -15,6 +15,23 @@ namespace Library_Management_System_BackEnd.Repository
     {
         private readonly LibraryContext _context = context;
 
+        public async Task CancelResevation(string userId, int bookId)
+        {
+            var reservation = _context.Reservations.Where(reser =>
+                reser.BookId == bookId && reser.UserId == userId
+            );
+
+            foreach (Reservation rev in reservation)
+            {
+                if (rev.Status == ReservationStatus.Pending)
+                {
+                    rev.Status = ReservationStatus.Cancelled;
+                }
+            }
+            ;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task CreateReservation(int bookId, string userId)
         {
             var reservation = new Reservation { BookId = bookId, UserId = userId };

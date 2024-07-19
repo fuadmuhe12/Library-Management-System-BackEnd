@@ -84,5 +84,14 @@ namespace Library_Management_System_BackEnd.Controllers
             var reservations = await _reservationRepository.GetUserReservation(userId, query);
             return Ok(reservations.Select(reser => reser.MapToViewReservation()));
         }
+
+        [HttpPost]
+        [Route("/cancel/{bookId:int}")]
+        public async Task<IActionResult> CancelReservation([FromRoute] int bookId)
+        {
+            var userId = User.GetUserId();
+            await _reservationRepository.CancelResevation(userId, bookId);
+            return Ok();
+        }
     }
 }

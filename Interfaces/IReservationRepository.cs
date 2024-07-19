@@ -17,6 +17,7 @@ namespace Library_Management_System_BackEnd.Interfaces
         Task<List<Reservation>> GetBooksReservation(int bookId);
         Task<List<Reservation>> GetAllReservation(ReservationQuery query);
         Task<List<Reservation>> GetUserReservation(string userId, ReservationQuery query);
+        Task CancelResevation(string userId, int bookId);
 
 
     }

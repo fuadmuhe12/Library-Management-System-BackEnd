@@ -15,6 +15,7 @@ namespace Library_Management_System_BackEnd.Interfaces
         Task ReturnBook(string userId, int bookId);
         Task<List<BorrowingRecord>> GetAllBorrowingRecord(DateTime Deadline);
         Task<List<BorrowingRecord>> GetAllUserBorrowRecord(string userId, BorrowingRecordQuery query);
+        Task<List<BorrowingRecord>> GetAllBorrowRecord( BorrowingRecordQuery query);
 
     }
 }
