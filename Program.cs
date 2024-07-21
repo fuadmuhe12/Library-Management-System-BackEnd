@@ -93,12 +93,12 @@ builder
 builder.Services.AddDbContext<LibraryContext>(options =>
 {
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
+        Environment.GetEnvironmentVariable("DefaultConnection"),
         sqlOptions => sqlOptions.EnableRetryOnFailure()
     );
 });
 builder.Services.AddHangfire(config =>
-    config.UseSqlServerStorage(builder.Configuration.GetConnectionString("DefaultConnection"))
+    config.UseSqlServerStorage( Environment.GetEnvironmentVariable("DefaultConnection"))
 );
 
 // Add Identity services to the container
@@ -160,11 +160,10 @@ builder.Services.AddScoped<IBackgroundService, BackgroundServiceLMS>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 await app.DatabaseMigrateAsync();
