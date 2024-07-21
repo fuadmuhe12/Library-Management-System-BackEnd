@@ -7,6 +7,6 @@ namespace Library_Management_System_BackEnd.Entities.Dtos.TagsDto
 {
     public class ListOfTagsDto
     {
-        public List<string> Tags { get; set; } = [];
+        public List<string> Tags { get; set; } = new List<string>();
     }
 }

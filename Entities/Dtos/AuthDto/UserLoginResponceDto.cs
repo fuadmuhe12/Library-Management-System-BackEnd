@@ -9,6 +9,6 @@ namespace Library_Management_System_BackEnd.Entities.Dtos.AuthDto
     {
         public string Token { get; set; } = string.Empty;
         public string UserName { get; set; } = string.Empty;
-        public IList<string> Role { get; set; } = [];
+        public IList<string> Role { get; set; } = new List<string>();
     }
 }
